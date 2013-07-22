@@ -101,6 +101,9 @@ checkpidfile() {
 checkpidfiles() {
     for pidfile in "$@"; do
         case $pidfile in
+            "/var/run/*/*.pid")
+                # suppress spurious warning when this glob doesn't match anything
+                ;;
             /var/run/sm-notify.pid)
                 # ignore: this one is always stale, yet nothing bad happens
                 ;;
