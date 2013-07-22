@@ -144,10 +144,15 @@ checkswap() {
 }
 
 checkmailq() {
+    # this probably only works with postfix
     limit=${1:-20}
-    status=`mailq | tail -n 1`
-    [ "$status" = "Mail queue is empty" ] && return
-    count=`echo "$status" | awk '{print $5;}'`
+    status=$(mailq 2>&1| tail -n 1)
+    case "$status" in
+        "Mail queue is empty") return;;
+        *": mailq: not found") return;;
+        *) ;;
+    esac
+    count=$(echo "$status" | awk '{print $5;}')
     [ $count -gt $limit ] && warn "mail queue is large ($count requests)"
 }
 
