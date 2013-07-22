@@ -1,0 +1,9 @@
+pov-check-health for Debian
+---------------------------
+
+To start, copy /usr/share/doc/pov-check-health/check-health.example to
+/etc/pov/check-health.  Edit to suit.  Run 'sudo check-health' to test.
+
+The cron script is enabled automatically.
+
+ -- Marius Gedminas <marius@pov.lt>  Mon, 22 Jul 2013 16:02:48 +0300

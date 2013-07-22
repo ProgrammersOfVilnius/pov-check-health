@@ -6,7 +6,7 @@ all:
 .PHONY: install
 install:
 	install -D -m 644 functions.sh $(DESTDIR)/usr/share/pov-check-health/functions.sh
-	install -D -m 644 example.conf $(DESTDIR)/etc/pov/check-health
+	install -D -m 644 example.conf $(DESTDIR)/usr/share/doc/pov-check-health/check-health.example
 	install -D check-health.sh $(DESTDIR)/usr/sbin/check-health
 
 .PHONY: source-package
