@@ -1,0 +1,5 @@
+pov-check-health (0.1) precise; urgency=low
+
+  * Initial release.
+
+ -- Marius Gedminas <marius@pov.lt>  Mon, 22 Jul 2013 15:38:14 +0300

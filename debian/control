@@ -1,0 +1,17 @@
+Source: pov-check-health
+Section: admin
+Priority: extra
+Maintainer: Marius Gedminas <marius@pov.lt>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+Homepage: https://github.com/ProgrammersOfVilnius/pov-check-health
+
+Package: pov-check-health
+Architecture: all
+Depends: ${misc:Depends}
+Recommends: postfix | mail-transport-agent
+Description: poor man's system health monitoring
+ * This is an unofficial package.
+ .
+ This package contains a cron script that can be configured with a set of
+ system health checks to monitor the status of your servers.
