@@ -2,6 +2,8 @@ pov-check-health (0.3) UNRELEASED; urgency=low
 
   * checkuptime accepts "min", "hour" and "sec" suffixes in addition to "m",
     "h", "s".
+  * Fixed bug in extract-documentation.py where it would drop the first
+    documented check (checkuptime).
   * Bugfix for checkinodes on /very/long/device/names.
 
  -- Marius Gedminas <marius@gedmin.as>  Tue, 23 Jul 2013 15:12:28 +0300
