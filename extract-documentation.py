@@ -20,7 +20,6 @@ def main():
         doc = (doc.lstrip('# ')
                   .replace('\n# ', '\n')
                   .replace('\n#', '\n')
-                  .replace('*', '\\*')
                   .replace('\n  Example:', '\n\n  Example:'))
         doc = re.sub('Example: (.*)', r'Example: ``\1``', doc)
         print doc

@@ -98,7 +98,7 @@ checkpidfiles <filename> ...
   Check that the process listed in given pidfiles are running.
 
 
-  Example: ``checkpidfiles /var/run/\*.pid /var/run/\*/\*.pid``
+  Example: ``checkpidfiles /var/run/*.pid /var/run/*/*.pid``
 
 
 checkproc <name>
@@ -172,7 +172,7 @@ checkzopemailq <path> ...
   <path> needs to refer to the 'new' subdirectory of the mail queue.
 
 
-  Example: ``checkzopemailq /apps/zopes/\*/var/mailqueue/new``
+  Example: ``checkzopemailq /apps/zopes/*/var/mailqueue/new``
 
 
 checkcups <queuename>
