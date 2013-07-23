@@ -45,7 +45,7 @@ so make sure email delivery works and root is aliased to a working
 email address via ``/etc/aliases``.
 
 You can also run the checks manually by running ``check-health`` and
-see the report on the console.
+see the report on the console.  Run ``check-health -v`` for more verbosity.
 
 
 Available checks
