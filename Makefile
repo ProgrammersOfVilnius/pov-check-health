@@ -4,6 +4,17 @@ version := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
 .PHONY: all
 all: check-health.8
 
+.PHONY: test check
+test check: checkversion
+	./tests.sh
+
+.PHONY: checkversion
+checkversion:
+	@grep -q ":Version: $(version)" check-health.rst || { \
+	    echo "Version number in check-health.rst doesn't match debian/changelog" 2>&1; \
+	    exit 1; \
+	}
+
 check-health.8: check-health.rst
 	rst2man check-health.rst > check-health.8
 
