@@ -4,8 +4,17 @@ pov-check-health
 This is a "poor man's Nagios": a cron script that runs once an hour to
 perform some basic system health checks.
 
+Quick start::
+
+    sudo add-apt-repository ppa:pov/ppa
+    sudo apt-get update
+    sudo apt-get install pov-check-health
+
 The checks are configured in ``/etc/pov/check-health``, which is actually
-a shell file that is sourced from the cron script.  Example ::
+a shell file that is sourced from the cron script.  If this file is missing,
+``check-health`` does nothing.
+
+Example configuration file::
 
     # Check that processes are running
     checkproc apache2
