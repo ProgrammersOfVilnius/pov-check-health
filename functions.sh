@@ -85,9 +85,9 @@ _to_mb() {
 
 # checkuptime [<uptime>[s/m/h/sec/min/hour]]
 #   Skip the rest of the checks if system uptime is less than N
-#   seconds/minutes/hours
+#   seconds/minutes/hours.
 #
-#   <uptime> defaults to 10 minutes
+#   <uptime> defaults to 10 minutes.
 #
 #   Example: checkuptime 10m
 checkuptime() {
@@ -104,7 +104,7 @@ checkuptime() {
 #   Check that the filesystem mounted on <mountpoint> has at least <amount>
 #   of metric kilo/mega/giga/terabytes free.
 #
-#   <amount> defaults to 1M
+#   <amount> defaults to 1M.
 #
 #   Example: checkfs / 100M
 checkfs() {
@@ -119,7 +119,7 @@ checkfs() {
 #   Check that the filesystem mounted on <mountpoint> has at least <inodes>
 #   of free inodes left.
 #
-#   <inodes> defaults to 5000
+#   <inodes> defaults to 5000.
 #
 #   Example: checkinodes /
 checkinodes() {
@@ -186,7 +186,7 @@ checkpidfiles() {
 # checkproc <name>
 #   Check that a process with a given name is running.
 #
-#   See also: checkproc_pgrep, checkproc_pgrep_full
+#   See also: checkproc_pgrep, checkproc_pgrep_full.
 #
 #   Example: checkproc crond
 checkproc() {
@@ -198,11 +198,11 @@ checkproc() {
 #   Check that a process with a given name is running.
 #
 #   Uses pgrep instead of pidof, which makes it handle scripts too.
-
-#   (XXX why didn't I use pidof -x?  ignorance?)
 #
 #   Example: checkproc_pgrep tracd
 checkproc_pgrep() {
+    # (XXX why didn't I use pidof -x in checkproc?  ignorance?  then this
+    # wouldn't be necessary)
     info_check checkproc_pgrep $@
     [ -z "$(pgrep $1)" ] && warn "$1 is not running"
 }
@@ -232,7 +232,7 @@ checktoomanyproc() {
 #   Check that at least <free> metric mega/giga/terabytes of virtual memory are
 #   free.
 #
-#   <free> defaults to 100 megabytes
+#   <free> defaults to 100 megabytes.
 #
 #   Example: checkram 100M
 checkram() {
@@ -245,7 +245,7 @@ checkram() {
 # checkswap [<limit>[M/G/T]]
 #   Check if more than <limit> metric mega/giga/terabytes of swap are used.
 #
-#   <limit> defaults to 100 megabytes
+#   <limit> defaults to 100 megabytes.
 #
 #   Example: checkswap 2G
 checkswap() {
@@ -258,7 +258,7 @@ checkswap() {
 # checkmailq [<limit>]
 #   Check if more than <limit> emails are waiting in the outgoing mail queue.
 #
-#   <limit> defaults to 20
+#   <limit> defaults to 20.
 #
 #   The check is silently skipped if you don't have any MTA (that provides a
 #   mailq command) installed.  Otherwise it probably works only with Postfix.
@@ -330,7 +330,7 @@ cmpfiles() {
 }
 
 # checkaliases
-#   Check if /etc/aliases.db is up to date
+#   Check if /etc/aliases.db is up to date.
 #
 #   Probably works only with Postfix, and only if you use the default database
 #   format.
@@ -347,7 +347,7 @@ checkaliases() {
 }
 
 # checklilo
-#   Check if LILO was run after a kernel update
+#   Check if LILO was run after a kernel update.
 #
 #   Background: if you don't re-run LILO after you update your kernel, your
 #   machine will not boot.  We had to use LILO on one server because GRUB
