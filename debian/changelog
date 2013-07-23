@@ -1,4 +1,4 @@
-pov-check-health (0.3) UNRELEASED; urgency=low
+pov-check-health (0.3) precise; urgency=low
 
   * checkuptime accepts "min", "hour" and "sec" suffixes in addition to "m",
     "h", "s".
