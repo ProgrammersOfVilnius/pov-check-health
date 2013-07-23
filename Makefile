@@ -1,6 +1,8 @@
 source := $(shell dpkg-parsechangelog | awk '$$1 == "Source:" { print $$2 }')
 version := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
 
+VCS_STATUS = git status --porcelain
+
 .PHONY: all
 all: check-health.8
 
@@ -38,6 +40,7 @@ source-package: all
 
 .PHONY: upload-to-ppa
 upload-to-ppa: check source-package
+	@test -z "`$(VCS_STATUS) 2>&1`" || { echo; echo "Your working tree is not clean; please commit and try again" 1>&2; $(VCS_STATUS); exit 1; }
 	dput ppa:pov/ppa ../$(source)_$(version)_source.changes
 	git tag $(version)
 
