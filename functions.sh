@@ -7,6 +7,12 @@
 #
 
 verbose=0
+purple=
+reset=
+if [ -t 1 ] && [ $(tput colors) -ge 8 ]; then
+    purple='\033[35m'
+    reset='\033[0m'
+fi
 
 warn() {
     echo "$@" 1>&2
@@ -15,6 +21,12 @@ warn() {
 info() {
     if [ $verbose -gt 0 ]; then
         echo "$@"
+    fi
+}
+
+info_check() {
+    if [ $verbose -gt 0 ]; then
+        echo "${purple}+ $@${reset}"
     fi
 }
 
@@ -77,7 +89,7 @@ _to_mb() {
 #
 #   Example: checkuptime 10m
 checkuptime() {
-    info checkuptime $@
+    info_check checkuptime $@
     want=$(_to_seconds $1 600)
     uptime=$(cut /proc/uptime -d . -f 1)
     if [ $uptime -lt $want ]; then
@@ -94,7 +106,7 @@ checkuptime() {
 #
 #   Example: checkfs / 100M
 checkfs() {
-    info checkfs $@
+    info_check checkfs $@
     need=$(_to_kb $2 1000)
     free=$(df -P -k $1 | awk 'NR==2 { print $4; }')
     [ -z "$free" ] && { warn "couldn't figure out free space in $1"; return; }
@@ -109,7 +121,7 @@ checkfs() {
 #
 #   Example: checkinodes /
 checkinodes() {
-    info checkinodes $@
+    info_check checkinodes $@
     need=${2:-5000}
     free=$(df -i $1 | awk 'NR==2 { print $4; }')
     [ $free -lt $need ] && warn "$1 is low on inodes ($free)"
@@ -127,7 +139,7 @@ checkinodes() {
 #
 #   Example: checknfs /home
 checknfs() {
-    info checknfs $@
+    info_check checknfs $@
     [ -z "$(grep "$1 .* nfs " /proc/mounts)" ] && {
         warn "$1 is not NFS-mounted, trying to remount"
         mount -a -t nfs
@@ -140,7 +152,7 @@ checknfs() {
 #
 #   Example: checkpidfile /var/run/crond.pid
 checkpidfile() {
-    info checkpidfile $@
+    info_check checkpidfile $@
     [ -f $1 ] || { warn "$1: pidfile missing"; return; }
     pid="$(cat $1)"
     test -d "/proc/$pid" || warn "$1: stale pidfile ($pid)"
@@ -176,7 +188,7 @@ checkpidfiles() {
 #
 #   Example: checkproc crond
 checkproc() {
-    info checkproc $@
+    info_check checkproc $@
     [ -z "$(pidof -s $1)" ] && warn "$1 is not running"
 }
 
@@ -189,7 +201,7 @@ checkproc() {
 #
 #   Example: checkproc_pgrep tracd
 checkproc_pgrep() {
-    info checkproc_pgrep $@
+    info_check checkproc_pgrep $@
     [ -z "$(pgrep $1)" ] && warn "$1 is not running"
 }
 
@@ -201,7 +213,7 @@ checkproc_pgrep() {
 #   Example: checkproc_pgrep_full scriptname.py
 #   Example: checkproc_pgrep_full '/usr/bin/java -jar /usr/share/jenkins/jenkins.war'
 checkproc_pgrep_full() {
-    info checkproc_pgrep_full $@
+    info_check checkproc_pgrep_full $@
     [ -z "$(pgrep -f "$@")" ] && warn "$1 is not running"
 }
 
@@ -210,7 +222,7 @@ checkproc_pgrep_full() {
 #
 #   Example: checktoomanyproc aspell 2
 checktoomanyproc() {
-    info checktoomanyproc $@
+    info_check checktoomanyproc $@
     [ "$(pidof $1|wc -w)" -ge "$2" ] && warn "More than $2 copies of $1 running"
 }
 
@@ -222,7 +234,7 @@ checktoomanyproc() {
 #
 #   Example: checkram 100M
 checkram() {
-    info checkram $@
+    info_check checkram $@
     need=$(_to_mb $1 100)
     free=$(free -mt | awk '$1 ~ /^Total/ { print $4; }')
     [ $free -lt $need ] && warn "low on virtual memory ($free)"
@@ -235,7 +247,7 @@ checkram() {
 #
 #   Example: checkswap 2G
 checkswap() {
-    info checkswap $@
+    info_check checkswap $@
     trip=$(_to_mb $1 100)
     used=$(free -m| awk '/^Swap/ {print $3}')
     [ $used -gt $trip ] && warn "too much swap used ($used)"
@@ -251,7 +263,7 @@ checkswap() {
 #
 #   Example: checkmailq 100
 checkmailq() {
-    info checkmailq $@
+    info_check checkmailq $@
     # this probably only works with postfix
     limit=${1:-20}
     status=$(mailq 2>&1| tail -n 1)
@@ -272,7 +284,7 @@ checkmailq() {
 #
 #   Example: checkzopemailq /apps/zopes/*/var/mailqueue/new
 checkzopemailq() {
-    info checkzopemailq $@
+    info_check checkzopemailq $@
     for f in $(find "$@" -type f -mmin +1); do
         warn "stale zope mail message: $f"
     done
@@ -290,7 +302,7 @@ checkzopemailq() {
 #
 #   Example: checkcups cheese
 checkcups() {
-    info checkcups $@
+    info_check checkcups $@
     queuename=$1
     lpq $queuename | grep -s -q "^$queuename is not ready$" && {
         warn "printer $1 is not ready, trying to enable"
@@ -307,7 +319,7 @@ checkcups() {
 #
 #   Example: cmpfiles /etc/init.d/someservice /home/someservice/initscript
 cmpfiles() {
-    info cmpfiles $@
+    info_check cmpfiles $@
     file1="$1"
     file2="$2"
     cmp -s "$file1" "$file2" || {
@@ -326,7 +338,7 @@ cmpfiles() {
 #
 #   Example: checkaliases
 checkaliases() {
-    info checkaliases $@
+    info_check checkaliases $@
     [ /etc/aliases.db -ot /etc/aliases ] && {
         warn "/etc/aliases.db out of date; run newaliases"
     }
@@ -341,6 +353,6 @@ checkaliases() {
 #
 #   Example: checklilo
 checklilo() {
-    info checklilo $@
+    info_check checklilo $@
     [ /boot/map -ot /vmlinuz ] && warn "lilo not updated after kernel upgrade"
 }
