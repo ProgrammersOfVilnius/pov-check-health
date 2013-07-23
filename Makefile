@@ -4,20 +4,25 @@ version := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
 .PHONY: all
 all: check-health.8
 
+check-health.8: check-health.rst
+	rst2man check-health.rst > check-health.8
+
 .PHONY: test check
-test check: checkversion
+test check: check-version check-docs
 	./tests.sh
 
 .PHONY: checkversion
-checkversion:
+check-version:
 	@grep -q ":Version: $(version)" check-health.rst || { \
 	    echo "Version number in check-health.rst doesn't match debian/changelog" 2>&1; \
 	    exit 1; \
 	}
 
-check-health.8: check-health.rst
-	rst2man check-health.rst > check-health.8
+.PHONY: check-docs
+check-docs:
+	@./extract-documentation.py -c README.rst -c check-health.rst || echo "Run make update-docs please"
 
+.PHONY: update-docs
 update-docs:
 	./extract-documentation.py -u README.rst -u check-health.rst
 
@@ -28,14 +33,14 @@ install:
 	install -D check-health.sh $(DESTDIR)/usr/sbin/check-health
 
 .PHONY: source-package
-source-package:
+source-package: all
 	debuild -S -i -k$(GPGKEY)
 
 .PHONY: upload-to-ppa
-upload-to-ppa: source-package
+upload-to-ppa: check source-package
 	dput ppa:pov/ppa ../$(source)_$(version)_source.changes
 	git tag $(version)
 
 .PHONY: binary-package
-binary-package:
+binary-package: all
 	debuild -i -k$(GPGKEY)

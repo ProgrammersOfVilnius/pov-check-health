@@ -51,11 +51,37 @@ def main():
        description="extract documentation from functions.sh and format as ReStructured Text")
     parser.add_option('-u', '--update', metavar='filename', action='append',
        help='update a file in place (can be used more than once)')
+    parser.add_option('-c', '--check', metavar='filename', action='append',
+       help='check whether a file needs to be updated (can be used more than once)')
     opts, args = parser.parse_args()
     if args:
         parser.error('no arguments expected')
 
     docs = format_rst(extract_docs())
+
+    if opts.check and opts.update:
+        parser.error("cannot use -c and -u at the same time")
+
+    if opts.check:
+        failures = 0
+        for filename in opts.check:
+            with open(filename, 'r') as f:
+                old = f.read()
+                try:
+                    new = replace_generated(old, docs)
+                except ReplaceError, e:
+                    sys.stderr.write("extract-documentation: %s: %s\n" % (filename, e))
+                    sys.stderr.flush()
+                    failures += 1
+                else:
+                    if new != old:
+                        sys.stderr.write("%s is outdated\n" % filename)
+                        sys.stderr.flush()
+                        failures += 1
+        if failures:
+            sys.exit(1)
+        else:
+            sys.exit(0)
 
     if opts.update:
         for filename in opts.update:
