@@ -1,6 +1,8 @@
 pov-check-health (0.2) precise; urgency=low
 
   * check-health -v for verbose operation.
+  * check-health -h for help operation.
+  * check-health -f filename for different config file.
   * All checks in functions.sh were documented.
   * Added manual page for check-health(8).
 

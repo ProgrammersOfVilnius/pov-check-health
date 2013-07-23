@@ -15,7 +15,8 @@ check system health
 SYNOPSIS
 ========
 
-check-health [-v]
+check-health [-v] [-c configfile]
+check-health -h
 
 
 DESCRIPTION
@@ -34,7 +35,9 @@ indicates an error, and cron emails it to ``root``.
 OPTIONS
 =======
 
+-h           Print brief usage message and exit.
 -v           Verbose output: show what checks are being performed.
+-c FILENAME  Use the specified config file instead of ``/etc/pov/check-health``.
 
 
 AVAILABLE CHECKS

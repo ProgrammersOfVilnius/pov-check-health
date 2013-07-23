@@ -6,7 +6,6 @@
 # Helpers
 #
 
-verbose=0
 purple=
 reset=
 if [ -t 1 ] && [ $(tput colors) -ge 8 ]; then

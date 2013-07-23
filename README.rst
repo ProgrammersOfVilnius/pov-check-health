@@ -53,8 +53,13 @@ The checks run with root privileges.  Any failures are reported via cron,
 so make sure email delivery works and root is aliased to a working
 email address via ``/etc/aliases``.
 
-You can also run the checks manually by running ``check-health`` and
-see the report on the console.  Run ``check-health -v`` for more verbosity.
+You can also run the checks manually by running ``check-health`` and see the
+report on the console.  Run ``check-health -v`` for more verbosity.  Run
+``check-health -f filename`` to use a different config file (useful to test it
+before the cron script takes over).  Run ``check-health -h`` for a brief usage
+notice::
+
+    Usage: check-health [-h] [-v] [-f configfile]
 
 
 Available checks
