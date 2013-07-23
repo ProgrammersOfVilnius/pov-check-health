@@ -2,3 +2,4 @@ debian/files
 debian/pov-check-health.debhelper.log
 debian/pov-check-health.substvars
 debian/pov-check-health/
+check-health.8

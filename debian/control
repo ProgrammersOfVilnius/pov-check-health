@@ -2,7 +2,7 @@ Source: pov-check-health
 Section: admin
 Priority: extra
 Maintainer: Marius Gedminas <marius@pov.lt>
-Build-Depends: debhelper (>= 8.0.0)
+Build-Depends: debhelper (>= 8.0.0), python-docutils
 Standards-Version: 3.9.4
 Homepage: https://github.com/ProgrammersOfVilnius/pov-check-health
 

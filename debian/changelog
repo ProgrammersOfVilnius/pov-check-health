@@ -2,6 +2,7 @@ pov-check-health (0.2) precise; urgency=low
 
   * check-health -v for verbose operation.
   * All checks in functions.sh were documented.
+  * Added manual page for check-health(8).
 
  -- Marius Gedminas <marius@gedmin.as>  Tue, 23 Jul 2013 11:54:11 +0300
 

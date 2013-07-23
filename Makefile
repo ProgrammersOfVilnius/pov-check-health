@@ -2,7 +2,10 @@ source := $(shell dpkg-parsechangelog | awk '$$1 == "Source:" { print $$2 }')
 version := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
 
 .PHONY: all
-all:
+all: check-health.8
+
+check-health.8: check-health.rst
+	rst2man check-health.rst > check-health.8
 
 .PHONY: install
 install:
