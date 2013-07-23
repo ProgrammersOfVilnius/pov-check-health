@@ -247,4 +247,3 @@ checklilo
 
   Example: ``checklilo``
 
-

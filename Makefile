@@ -18,6 +18,9 @@ checkversion:
 check-health.8: check-health.rst
 	rst2man check-health.rst > check-health.8
 
+update-docs:
+	./extract-documentation.py -u README.rst -u check-health.rst
+
 .PHONY: install
 install:
 	install -D -m 644 functions.sh $(DESTDIR)/usr/share/pov-check-health/functions.sh
