@@ -1,5 +1,7 @@
 pov-check-health (0.3) UNRELEASED; urgency=low
 
+  * checkuptime accepts "min", "hour" and "sec" suffixes in addition to "m",
+    "h", "s".
   * Bugfix for checkinodes on /very/long/device/names.
 
  -- Marius Gedminas <marius@gedmin.as>  Tue, 23 Jul 2013 15:12:28 +0300

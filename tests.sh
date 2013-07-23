@@ -31,10 +31,13 @@ assertEqual() {
 assertEqual _to_seconds 14 = 14
 assertEqual _to_seconds 14s = 14
 assertEqual _to_seconds 14S = 14
+assertEqual _to_seconds 14sec = 14
 assertEqual _to_seconds 27m = 1620
 assertEqual _to_seconds 27M = 1620
+assertEqual _to_seconds 27min = 1620
 assertEqual _to_seconds 1h = 3600
 assertEqual _to_seconds 3H = 10800
+assertEqual _to_seconds 2hour = 7200
 assertEqual _to_seconds "" 100 = 100
 
 assertEqual _to_kb 14 = 14

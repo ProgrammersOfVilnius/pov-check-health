@@ -34,10 +34,13 @@ info_check() {
 _to_seconds() {
     case $1 in
         "") echo $2;;
+        *sec) echo ${1%sec};;
         *s) echo ${1%s};;
         *S) echo ${1%S};;
+        *min) echo $((${1%min} * 60));;
         *m) echo $((${1%m} * 60));;
         *M) echo $((${1%M} * 60));;
+        *hour) echo $((${1%hour} * 60 * 60));;
         *h) echo $((${1%h} * 60 * 60));;
         *H) echo $((${1%H} * 60 * 60));;
         *)  echo $1;;
@@ -80,7 +83,7 @@ _to_mb() {
 # Checks
 #
 
-# checkuptime [<uptime>[s/m/h]]
+# checkuptime [<uptime>[s/m/h/sec/min/hour]]
 #   Skip the rest of the checks if system uptime is less than N
 #   seconds/minutes/hours
 #
