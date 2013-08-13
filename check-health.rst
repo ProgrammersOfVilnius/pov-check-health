@@ -97,7 +97,12 @@ checkpidfile <filename>
 
 
 checkpidfiles <filename> ...
-  Check that the process listed in given pidfiles are running.
+  Check that the processes listed in given pidfiles are running.
+
+  Suppresses warnings for /var/run/sm-notify.pid because it feels like a
+  false positive.
+
+  Suppresses warnings for failed glob expansion under /run or /var/run.
 
 
   Example: ``checkpidfiles /var/run/*.pid /var/run/*/*.pid``

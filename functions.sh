@@ -161,13 +161,18 @@ checkpidfile() {
 }
 
 # checkpidfiles <filename> ...
-#   Check that the process listed in given pidfiles are running.
+#   Check that the processes listed in given pidfiles are running.
+#
+#   Suppresses warnings for /var/run/sm-notify.pid because it feels like a
+#   false positive.
+#
+#   Suppresses warnings for failed glob expansion under /run or /var/run.
 #
 #   Example: checkpidfiles /var/run/*.pid /var/run/*/*.pid
 checkpidfiles() {
     for pidfile in "$@"; do
         case $pidfile in
-            "/var/run/*/*.pid")
+            "/run/*.pid"|"/var/run/*.pid"|"/run/*/*.pid"|"/var/run/*/*.pid")
                 # suppress spurious warning when this glob doesn't match anything
                 info "ignoring $pidfile since glob failed to match"
                 ;;
