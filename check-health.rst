@@ -125,7 +125,7 @@ checkproc <name>
 checkproc_pgrep <name>
   Check that a process with a given name is running.
 
-  Uses pgrep instead of pidof, which makes it handle scripts too.
+  Uses pgrep instead of pidof.
 
 
   Example: ``checkproc_pgrep tracd``

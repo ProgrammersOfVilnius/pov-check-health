@@ -1,9 +1,9 @@
-pov-check-health (0.4) UNRELEASED; urgency=low
+pov-check-health (0.4) precise; urgency=low
 
   * check-health -g to generate a config file.
   * checkproc now supports scripts by using pidof -x.
 
- -- Marius Gedminas <marius@gedmin.as>  Thu, 22 Aug 2013 12:04:16 +0300
+ -- Marius Gedminas <marius@gedmin.as>  Thu, 22 Aug 2013 12:40:30 +0300
 
 pov-check-health (0.3) precise; urgency=low
 
