@@ -196,18 +196,16 @@ checkpidfiles() {
 #   Example: checkproc crond
 checkproc() {
     info_check checkproc $@
-    [ -z "$(pidof -s $1)" ] && warn "$1 is not running"
+    [ -z "$(pidof -s -x $1)" ] && warn "$1 is not running"
 }
 
 # checkproc_pgrep <name>
 #   Check that a process with a given name is running.
 #
-#   Uses pgrep instead of pidof, which makes it handle scripts too.
+#   Uses pgrep instead of pidof.
 #
 #   Example: checkproc_pgrep tracd
 checkproc_pgrep() {
-    # (XXX why didn't I use pidof -x in checkproc?  ignorance?  then this
-    # wouldn't be necessary)
     info_check checkproc_pgrep $@
     [ -z "$(pgrep $1)" ] && warn "$1 is not running"
 }
