@@ -8,6 +8,8 @@ usage="Usage: check-health [-h] [-v] [-f configfile]"
 verbose=0
 configfile=/etc/pov/check-health
 
+libdir=.
+
 while getopts hvf: OPT; do
     case "$OPT" in
         v)
@@ -34,7 +36,7 @@ if [ $# -ne 0 ]; then
     exit 1
 fi
 
-. /usr/share/pov-check-health/functions.sh
+. $libdir/functions.sh
 
 if ! [ -f $configfile ]; then
     info "not performing any checks: $configfile doesn't exit"

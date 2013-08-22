@@ -4,10 +4,13 @@ version := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
 VCS_STATUS = git status --porcelain
 
 .PHONY: all
-all: check-health.8
+all: check-health.8 check-health
 
 check-health.8: check-health.rst
 	rst2man check-health.rst > check-health.8
+
+check-health: check-health.sh
+	sed -e 's,^libdir=\.$$,libdir=/usr/share/pov-check-health,' $< > $@
 
 .PHONY: test check
 test check: check-version check-docs
@@ -29,10 +32,10 @@ update-docs:
 	./extract-documentation.py -u README.rst -u check-health.rst
 
 .PHONY: install
-install:
+install: check-health
 	install -D -m 644 functions.sh $(DESTDIR)/usr/share/pov-check-health/functions.sh
 	install -D -m 644 example.conf $(DESTDIR)/usr/share/doc/pov-check-health/check-health.example
-	install -D check-health.sh $(DESTDIR)/usr/sbin/check-health
+	install -D check-health $(DESTDIR)/usr/sbin/check-health
 
 .PHONY: source-package
 source-package: all
