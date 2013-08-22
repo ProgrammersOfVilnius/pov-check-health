@@ -34,6 +34,7 @@ update-docs:
 .PHONY: install
 install: check-health
 	install -D -m 644 functions.sh $(DESTDIR)/usr/share/pov-check-health/functions.sh
+	install -D -m 644 generate.sh $(DESTDIR)/usr/share/pov-check-health/generate.sh
 	install -D -m 644 example.conf $(DESTDIR)/usr/share/doc/pov-check-health/check-health.example
 	install -D check-health $(DESTDIR)/usr/sbin/check-health
 

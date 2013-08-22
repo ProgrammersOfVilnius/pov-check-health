@@ -3,27 +3,33 @@
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 export PATH
 
-usage="Usage: check-health [-h] [-v] [-f configfile]"
+usage="Usage: check-health [-v] [-f configfile]
+       check-health -g > configfile
+       check-health -h"
 
 verbose=0
+generate=0
 configfile=/etc/pov/check-health
 
 libdir=.
 
-while getopts hvf: OPT; do
+while getopts hvgf: OPT; do
     case "$OPT" in
         v)
             verbose=1
             ;;
         h)
-            echo $usage
+            echo "$usage"
             exit 0
+            ;;
+        g)
+            generate=1
             ;;
         f)
             configfile=$OPTARG
             ;;
         *)
-            echo $usage 1>&2
+            echo "$usage" 1>&2
             exit 1
             ;;
     esac
@@ -34,6 +40,12 @@ shift $(($OPTIND - 1))
 if [ $# -ne 0 ]; then
     echo $usage 1>&2
     exit 1
+fi
+
+if [ $generate -ne 0 ]; then
+    . $libdir/generate.sh
+    generate
+    exit 0
 fi
 
 . $libdir/functions.sh

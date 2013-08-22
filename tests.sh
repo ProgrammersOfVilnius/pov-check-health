@@ -1,28 +1,36 @@
 #!/bin/sh
 
 . $(dirname $0)/functions.sh
+. $(dirname $0)/generate.sh
 
 n_tests=0
 
 assertEqual() {
     fn=$1
     shift
-    if [ x"$2" = x"=" ]; then
+    if [ x"$1" = x"=" ]; then
+        args="$fn"
+        actual=$($fn)
+        expected=$2
+    elif [ x"$2" = x"=" ]; then
+        args="$fn $1"
         actual=$($fn $1)
         expected=$3
     elif [ x"$3" = x"=" ]; then
+        args="$fn $1 $2"
         actual=$($fn $1 $2)
         expected=$4
     else
         warn "expected one of these forms:"
-        warn "  assertEquals fn arg = value"
-        warn "  assertEquals fn arg1 arg2 = value"
+        warn "  assertEqual fn = value"
+        warn "  assertEqual fn arg = value"
+        warn "  assertEqual fn arg1 arg2 = value"
         warn "got"
-        warn "  assertEquals $fn $@"
+        warn "  assertEqual $fn $@"
         exit 1
     fi
     if ! [ x"$actual" = x"$expected" ]; then
-        warn "assertion failure: $fn $@ == $actual (expected $expected)"
+        warn "assertion failure: $args == $actual (expected $expected)"
         exit 1
     fi
     n_tests=$(($n_tests + 1))
@@ -59,5 +67,27 @@ assertEqual _to_mb 27G = 27000
 assertEqual _to_mb 1t = 1000000
 assertEqual _to_mb 3T = 3000000
 assertEqual _to_mb "" 1000 = 1000
+
+_test() { emit "a"; }
+assertEqual _test = "a"
+
+_test() { prefix "b"; emit "c"; }
+assertEqual _test = "b
+c"
+
+_test() { prefix "d"; prefix "e"; emit "f"; }
+assertEqual _test = "d
+
+e
+f"
+
+_test() { prefix "g"; emit "h"; prefix "i"; emit "j"; }
+assertEqual _test = "g
+h
+
+i
+j"
+
+assertEqual emit "foo" = "foo"
 
 echo "all $n_tests tests passed"

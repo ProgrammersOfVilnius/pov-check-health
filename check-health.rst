@@ -8,15 +8,16 @@ check system health
 
 :Author: Marius Gedminas <marius@gedmin.as>
 :Date: 2013-07-23
-:Version: 0.3
+:Version: 0.4
 :Manual section: 8
 
 
 SYNOPSIS
 ========
 
-check-health [-v] [-c configfile]
-check-health -h
+**check-health** [**-v**] [**-c** *configfile*]
+**check-health** **-g** > *configfile*
+**check-health** **-h**
 
 
 DESCRIPTION
@@ -26,6 +27,9 @@ DESCRIPTION
 basic system health checks.  The checks are specified in the configuration
 file ``/etc/pov/check-health``; if that file doesn't exist,
 **check-health** will exit silently without checking anything.
+
+You can run ``check-health -g`` to generate a config file.  You'll probably
+need to modify it to suit your needs.
 
 Usually **check-health** is run automatically from cron.  It doesn't emit
 any output and returns exit code 0 if all checks pass.  Any output
@@ -37,6 +41,7 @@ OPTIONS
 
 -h           Print brief usage message and exit.
 -v           Verbose output: show what checks are being performed.
+-g           Generate a sample config file and print it to stdout.
 -c FILENAME  Use the specified config file instead of ``/etc/pov/check-health``.
 
 
@@ -279,7 +284,7 @@ BUGS
 ====
 
 **check-health** returns exit code 0 even if some checks failed.  You need
-to watch for stderr to notice problems.
+to watch stderr to notice problems.
 
 Many checks don't check their arguments for correctness and may fail in
 unexpected ways if you supply a wrong value (or neglect to supply a value
