@@ -84,8 +84,8 @@ generate_checkproc() {
                 emit "checkproc master # postfix"
                 ;;
             collectdmon)
-                emit $cmd
-                emit collectd
+                emit checkproc $cmd
+                emit checkproc collectd
                 ;;
             screen|tmux)
                 # probably transient
