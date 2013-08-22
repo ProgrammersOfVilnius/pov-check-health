@@ -83,6 +83,16 @@ generate_checkproc() {
             master)
                 emit "checkproc master # postfix"
                 ;;
+            collectdmon)
+                emit $cmd
+                emit collectd
+                ;;
+            screen|tmux)
+                # probably transient
+                ;;
+            /usr/sbin/postg)
+                emit checkproc postgrey
+                ;;
             *)
                 emit checkproc $cmd
                 ;;
