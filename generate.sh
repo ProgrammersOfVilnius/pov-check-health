@@ -34,7 +34,7 @@ generate_checkfs() {
     prefix "# Check free disk space"
     df -PT | { read header; while read device fstype size used free capacity mountpoint; do
         case $fstype in
-            tmpfs|devtmpfs|ecryptfs|nfs)
+            tmpfs|devtmpfs|ecryptfs|nfs|vboxsf)
                 ;;
             *)
                 emit "checkfs $mountpoint		100M"
@@ -69,6 +69,19 @@ generate_checkproc() {
         case $cmd in
             kthreadd/*)
                 ;;
+            dhclient|dhclient3)
+                # these come and go, I assume
+                ;;
+            console-kit-dae)
+                # truncated process name won't work with checkproc
+                ;;
+            upstart-*)
+                # truncated upstart helper process names won't work with
+                # checkproc; besides I'm not sure I want to explicitly
+                # check for implementation details of /sbin/init...
+                ;;
+            master)
+                emit "checkproc master # postfix"
             *)
                 emit checkproc $cmd
                 ;;
