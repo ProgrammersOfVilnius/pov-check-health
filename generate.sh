@@ -91,7 +91,9 @@ generate_checkproc() {
                 # probably transient
                 ;;
             /usr/sbin/postg)
-                emit checkproc postgrey
+                # this is horrible, but neither checkproc nor checkproc_pgrep
+                # postgrey work
+                emit checkproc_pgrep_full '^/usr/sbin/postgrey'
                 ;;
             *)
                 emit checkproc $cmd
