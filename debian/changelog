@@ -1,10 +1,10 @@
-pov-check-health (0.4.1) UNRELEASED; urgency=low
+pov-check-health (0.4.1) precise; urgency=low
 
   * Bugfix: check-health -g omitted the 'checkproc' in front of 'collectd' and
     'collectdmon'.  This results in new copies of collectd being spawned
     whenever you run check-health with the generated config file.
 
- -- Marius Gedminas <marius@gedmin.as>  Thu, 22 Aug 2013 15:53:47 +0300
+ -- Marius Gedminas <marius@gedmin.as>  Thu, 22 Aug 2013 16:14:33 +0300
 
 pov-check-health (0.4) precise; urgency=low
 
