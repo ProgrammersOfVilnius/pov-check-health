@@ -82,6 +82,7 @@ generate_checkproc() {
                 ;;
             master)
                 emit "checkproc master # postfix"
+                ;;
             *)
                 emit checkproc $cmd
                 ;;
