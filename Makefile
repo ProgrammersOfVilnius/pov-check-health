@@ -43,16 +43,22 @@ install: check-health
 	install -D -m 644 example.conf $(DESTDIR)/usr/share/doc/pov-check-health/check-health.example
 	install -D check-health $(DESTDIR)/usr/sbin/check-health
 
+.PHONY: clean-build-tree
+clean-build-tree:
+	@./extract-documentation.py -c README.rst -c check-health.rst || { echo "Run make update-docs please" 1>&2; exit 1; }
+	@test -z "`$(VCS_STATUS) 2>&1`" || { echo; echo "Your working tree is not clean; please commit and try again" 1>&2; $(VCS_STATUS); exit 1; }
+	rm -rf pkgbuild/$(source)
+	git archive --format=tar --prefix=pkgbuild/$(source)/ HEAD | tar -xf -
+
 .PHONY: source-package
-source-package: all
-	debuild -S -i -k$(GPGKEY)
+source-package: clean-build-tree
+	cd pkgbuild/$(source) && debuild -S -i -k$(GPGKEY)
 
 .PHONY: upload-to-ppa
-upload-to-ppa: check source-package
-	@test -z "`$(VCS_STATUS) 2>&1`" || { echo; echo "Your working tree is not clean; please commit and try again" 1>&2; $(VCS_STATUS); exit 1; }
-	dput ppa:pov/ppa ../$(source)_$(version)_source.changes
+upload-to-ppa: source-package
+	dput ppa:pov/ppa pkgbuild/$(source)_$(version)_source.changes
 	git tag $(version)
 
 .PHONY: binary-package
-binary-package: all
-	debuild -i -k$(GPGKEY)
+binary-package: clean-build-tree
+	cd pkgbuild/$(source) && debuild -i -k$(GPGKEY)
