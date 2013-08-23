@@ -1,6 +1,6 @@
 source := $(shell dpkg-parsechangelog | awk '$$1 == "Source:" { print $$2 }')
 version := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
-date := $(shell dpkg-parsechangelog | awk '$$1 == "Date:" { print $$2 }' | date --date="$(cat)" +%Y-%m-%d)
+date := $(shell dpkg-parsechangelog | grep ^Date: | cut -d: -f 2- | date --date="$$(cat)" +%Y-%m-%d)
 
 VCS_STATUS = git status --porcelain
 
