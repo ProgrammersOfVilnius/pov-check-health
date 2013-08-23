@@ -86,6 +86,8 @@ generate_checkproc() {
             collectdmon)
                 emit checkproc $cmd
                 emit checkproc collectd
+                # two collectds will fill up syslog with rrd errors
+                emit checktoomanyproc collectd 2
                 ;;
             screen|tmux)
                 # probably transient
