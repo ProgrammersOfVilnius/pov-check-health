@@ -20,11 +20,11 @@ test check: check-version check-docs
 .PHONY: checkversion
 check-version:
 	@grep -q ":Version: $(version)" check-health.rst || { \
-	    echo "Version number in check-health.rst doesn't match debian/changelog" 2>&1; \
+	    echo "Version number in check-health.rst doesn't match debian/changelog ($(version))" 2>&1; \
 	    exit 1; \
 	}
 	@grep -q ":Date: $(date)" check-health.rst || { \
-	    echo "Date in check-health.rst doesn't match debian/changelog" 2>&1; \
+	    echo "Date in check-health.rst doesn't match debian/changelog ($(date))" 2>&1; \
 	    exit 1; \
 	}
 
