@@ -228,7 +228,8 @@ checkproc_pgrep_full() {
 #   Example: checktoomanyproc aspell 2
 checktoomanyproc() {
     info_check checktoomanyproc $@
-    [ "$(pidof $1|wc -w)" -ge "$2" ] && warn "More than $2 copies of $1 running"
+    n=$(pidof $1|wc -w)
+    [ "$n" -ge "$2" ] && warn "More than $(($2-1)) copies ($n) of $1 running"
 }
 
 # checkram [<free>[M/G/T]]
