@@ -15,8 +15,10 @@ check system health
 SYNOPSIS
 ========
 
-**check-health** [**-v**] [**-c** *configfile*]
+**check-health** [**-v**] [**-f** *configfile*]
+
 **check-health** **-g** > *configfile*
+
 **check-health** **-h**
 
 
@@ -42,7 +44,7 @@ OPTIONS
 -h           Print brief usage message and exit.
 -v           Verbose output: show what checks are being performed.
 -g           Generate a sample config file and print it to stdout.
--c FILENAME  Use the specified config file instead of ``/etc/pov/check-health``.
+-f FILENAME  Use the specified config file instead of ``/etc/pov/check-health``.
 
 
 AVAILABLE CHECKS
