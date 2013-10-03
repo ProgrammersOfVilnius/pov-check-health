@@ -73,13 +73,17 @@ source-package: clean-build-tree
 upload-to-ppa: source-package
 	dput ppa:pov/ppa pkgbuild/$(source)_$(version)_source.changes
 	git tag $(version)
+	git push
+	git push --tags
 
 .PHONY: binary-package
 binary-package: clean-build-tree
 	cd pkgbuild/$(source) && debuild -i -k$(GPGKEY)
+	@echo
+	@echo "Built pkgbuild/$(source)_$(version)_all.deb"
 
 .PHONY: vagrant-test-install
 vagrant-test-install: binary-package
 	cp pkgbuild/$(source)_$(version)_all.deb $(VAGRANT_DIR)/
 	cd $(VAGRANT_DIR) && vagrant up
-	ssh $(VAGRANT_SSH_ALIAS) 'export DEBIAN_FRONTEND=noninteractive; sudo dpkg -i /vagrant/$(source)_$(version)_all.deb && sudo apt-get install -f'
+	ssh $(VAGRANT_SSH_ALIAS) 'sudo DEBIAN_FRONTEND=noninteractive dpkg -i /vagrant/$(source)_$(version)_all.deb && sudo apt-get install -f'
