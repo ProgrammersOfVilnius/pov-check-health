@@ -16,7 +16,7 @@ VAGRANT_SSH_ALIAS = vagrantbox
 
 
 .PHONY: all
-all: check-health.8 check-health
+all: check-health.8 check-health check-virtualenvs.8
 
 %.8: %.rst
 	rst2man $< > $@
@@ -53,6 +53,7 @@ install: check-health
 	install -D -m 644 generate.sh $(DESTDIR)/usr/share/pov-check-health/generate.sh
 	install -D -m 644 example.conf $(DESTDIR)/usr/share/doc/pov-check-health/check-health.example
 	install -D check-health $(DESTDIR)/usr/sbin/check-health
+	install -D check-virtualenvs.sh $(DESTDIR)/usr/sbin/check-virtualenvs
 
 
 VCS_STATUS = git status --porcelain
