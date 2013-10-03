@@ -3,7 +3,7 @@
 verbose=0
 
 if [ x"$1" = x"-v" ]; then
-  verbose=1
+    verbose=1
 fi
 
 warn() {
@@ -25,10 +25,10 @@ check() {
     fi
 }
 
-for python in /usr/bin/python2.[0-9]; do
+for python in /usr/bin/python[23].[0-9]; do
     python=${python#/usr/bin/}
     info "looking for $python virtualenvs"
-    for libdir in $(locate -r /lib/$python$ | grep -v ^/usr/lib/$python); do
+    for libdir in $(locate -r /lib/$python$ | grep -vE "^/usr/(local/)?lib/$python"); do
         latest_python_in_this_venv=$(ls ${libdir%/$python}|tail -n 1)
         if test $python != "$latest_python_in_this_venv"; then
             info "${libdir%/lib/$python}/lib has multiple python versions"

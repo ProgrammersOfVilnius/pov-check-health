@@ -45,8 +45,11 @@ get the latest bugfixes.  Sometimes this breaks your virtualenvs
 completely.
 
 
-BUGS
-====
+TROUBLESHOOTING
+===============
 
-Currently **check-virtualenvs** ignores virtualenvs that use Python 3.
+If you get errors like ::
 
+  locate: can not stat () `/var/lib/mlocate/mlocate.db': No such file or directory
+
+be sure to run **updatedb**\ (8).
