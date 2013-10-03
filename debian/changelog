@@ -1,4 +1,4 @@
-pov-check-health (0.5.0) UNRELEASED; urgency=low
+pov-check-health (0.5.0) precise; urgency=low
 
   * New script: check-virtualenvs.
 

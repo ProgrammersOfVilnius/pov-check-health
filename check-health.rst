@@ -7,8 +7,8 @@ check system health
 -------------------
 
 :Author: Marius Gedminas <marius@gedmin.as>
-:Date: 2013-08-28
-:Version: 0.4.2
+:Date: 2013-10-03
+:Version: 0.5.0
 :Manual section: 8
 
 
