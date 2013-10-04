@@ -14,6 +14,8 @@ info() {
     test $verbose -ne 0 && echo "$@"
 }
 
+rc=0
+
 check() {
     binary=$1
     system=$2
@@ -22,6 +24,7 @@ check() {
         info "$binary is up to date"
     else
         warn "$binary differs from $system"
+        rc=1
     fi
 }
 
@@ -38,3 +41,5 @@ for python in /usr/bin/python[23].[0-9]; do
         fi
     done
 done
+
+exit $rc

@@ -1,3 +1,10 @@
+pov-check-health (0.5.1) UNRELEASED; urgency=low
+
+  * check-virtualenvs: meaningful exit code (1 if outdated virtualenvs were
+    found, 0 otherwise).
+
+ -- Marius Gedminas <marius@gedmin.as>  Fri, 04 Oct 2013 18:57:25 +0300
+
 pov-check-health (0.5.0) precise; urgency=low
 
   * New script: check-virtualenvs.
