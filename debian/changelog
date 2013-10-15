@@ -1,4 +1,4 @@
-pov-check-health (0.5.1) UNRELEASED; urgency=low
+pov-check-health (0.5.1) precise; urgency=low
 
   * check-virtualenvs: meaningful exit code (1 if outdated virtualenvs were
     found, 0 otherwise).
