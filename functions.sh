@@ -270,15 +270,29 @@ checkswap() {
 #   Example: checkmailq 100
 checkmailq() {
     info_check checkmailq $@
-    # this probably only works with postfix
     limit=${1:-20}
     status=$(mailq 2>&1| tail -n 1)
     case "$status" in
-        "Mail queue is empty") return;;
-        *": mailq: not found") return;;
-        *) ;;
+        "Mail queue is empty")
+            return
+            ;;
+        *": mailq: not found")
+            info "mailq not found, skipping check"
+            return
+            ;;
+        *"Total requests:"*)
+            # sendmail
+            count=$(echo "$status" | awk '{print $3;}')
+            ;;
+        "-- "*" Kbytes in "*" Request.")
+            # postfix
+            count=$(echo "$status" | awk '{print $5;}')
+            ;;
+        *)
+            info "mailq output format not recognized, skipping check"
+            return
+            ;;
     esac
-    count=$(echo "$status" | awk '{print $5;}')
     [ $count -gt $limit ] && warn "mail queue is large ($count requests)"
 }
 
