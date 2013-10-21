@@ -245,7 +245,8 @@ checktoomanyproc() {
 #   Example: checktoomanyproc_pgrep aspell tracd
 checktoomanyproc_pgrep() {
     info_check checktoomanyproc_pgrep $@
-    [ "$(pgrep $1|wc -w)" -ge "$2" ] && warn "More than $2 copies of $1 running"
+    n=$(pgrep $1|wc -w)
+    [ "$n" -ge "$2" ] && warn "More than $(($2-1)) copies ($n) of $1 running"
 }
 
 # checktoomanyproc_pgrep_full <limit> <cmdline>
@@ -259,7 +260,8 @@ checktoomanyproc_pgrep_full() {
     info_check checktoomanyproc_pgrep_full $@
     limit=$1
     shift
-    [ "$(pgrep -f "$@"|wc -w)" -ge "$limit" ] && warn "More than $limit copies of $* running"
+    n=$(pgrep -f "$@"|wc -w)
+    [ "$n" -ge "$limit" ] && warn "More than $((limit-1)) copies ($n) of $* running"
 }
 
 # checkram [<free>[M/G/T]]
