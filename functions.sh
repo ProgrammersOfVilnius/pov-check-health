@@ -233,7 +233,12 @@ checkproc_pgrep_full() {
 #   Example: checktoomanyproc aspell 2
 checktoomanyproc() {
     info_check checktoomanyproc $@
-    n=$(pidof -x $1|wc -w)
+    out=$(pidof -x $1)
+    if [ $? -ne 0 ]; then
+        warn "pidof -x $1 failed: $out"
+        return
+    fi
+    n=$(echo "$out"|wc -w)
     [ "$n" -ge "$2" ] && warn "More than $(($2-1)) copies ($n) of $1 running"
 }
 
@@ -245,7 +250,12 @@ checktoomanyproc() {
 #   Example: checktoomanyproc_pgrep aspell tracd
 checktoomanyproc_pgrep() {
     info_check checktoomanyproc_pgrep $@
-    n=$(pgrep $1|wc -w)
+    out=$(pgrep $1)
+    if [ $? -ne 0 ]; then
+        warn "pgrep $1 failed: $out"
+        return
+    fi
+    n=$(echo "$out"|wc -w)
     [ "$n" -ge "$2" ] && warn "More than $(($2-1)) copies ($n) of $1 running"
 }
 
@@ -260,7 +270,12 @@ checktoomanyproc_pgrep_full() {
     info_check checktoomanyproc_pgrep_full $@
     limit=$1
     shift
-    n=$(pgrep -f "$@"|wc -w)
+    out=$(pgrep -f "$@")
+    if [ $? -ne 0 ]; then
+        warn "pgrep -f $* failed: $out"
+        return
+    fi
+    n=$(echo "$out"|wc -w)
     [ "$n" -ge "$limit" ] && warn "More than $((limit-1)) copies ($n) of $* running"
 }
 
