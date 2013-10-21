@@ -1,4 +1,4 @@
-pov-check-health (0.6.0) UNRELEASED; urgency=low
+pov-check-health (0.6.0) precise; urgency=low
 
   * checktoomanyproc now supports scripts by using pidof -x.
   * New check: checktoomanyproc_pgrep, checktoomanyproc_pgrep_full.
