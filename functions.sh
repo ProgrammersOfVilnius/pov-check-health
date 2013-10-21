@@ -247,7 +247,7 @@ checktoomanyproc() {
 #
 #   Uses pgrep instead of pidof.
 #
-#   Example: checktoomanyproc_pgrep aspell tracd
+#   Example: checktoomanyproc_pgrep tracd 2
 checktoomanyproc_pgrep() {
     info_check checktoomanyproc_pgrep $@
     out=$(pgrep $1)

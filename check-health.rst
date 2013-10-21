@@ -159,7 +159,7 @@ checktoomanyproc_pgrep <name> <limit>
   Uses pgrep instead of pidof.
 
 
-  Example: ``checktoomanyproc_pgrep aspell tracd``
+  Example: ``checktoomanyproc_pgrep tracd 2``
 
 
 checktoomanyproc_pgrep_full <limit> <cmdline>
