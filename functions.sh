@@ -225,11 +225,38 @@ checkproc_pgrep_full() {
 # checktoomanyproc <name> <limit>
 #   Check that fewer than <limit> instances of a given process is running.
 #
+#   See also: checktoomanyproc_pgrep, checktoomanyproc_pgrep_full.
+#
 #   Example: checktoomanyproc aspell 2
 checktoomanyproc() {
     info_check checktoomanyproc $@
-    n=$(pidof $1|wc -w)
+    n=$(pidof -x $1|wc -w)
     [ "$n" -ge "$2" ] && warn "More than $(($2-1)) copies ($n) of $1 running"
+}
+
+# checktoomanyproc_pgrep <name> <limit>
+#   Check that fewer than <limit> instances of a given process is running.
+#
+#   Uses pgrep instead of pidof.
+#
+#   Example: checktoomanyproc_pgrep aspell tracd
+checktoomanyproc_pgrep() {
+    info_check checktoomanyproc_pgrep $@
+    [ "$(pgrep $1|wc -w)" -ge "$2" ] && warn "More than $2 copies of $1 running"
+}
+
+# checktoomanyproc_pgrep_full <limit> <cmdline>
+#   Check that fewer than <limit> instances of a given process is running.
+#
+#   Uses pgrep -f instead of pidof, which makes it handle all sorts of things.
+#
+#   Example: checktoomanyproc_pgrep_full 2 scriptname.py
+#   Example: checktoomanyproc_pgrep_full 2 '/usr/bin/java -jar /usr/share/jenkins/jenkins.war'
+checktoomanyproc_pgrep_full() {
+    info_check checktoomanyproc_pgrep_full $@
+    limit=$1
+    shift
+    [ "$(pgrep -f "$@"|wc -w)" -ge "$limit" ] && warn "More than $limit copies of $* running"
 }
 
 # checkram [<free>[M/G/T]]

@@ -1,3 +1,10 @@
+pov-check-health (0.6.0) UNRELEASED; urgency=low
+
+  * checktoomanyproc now supports scripts by using pidof -x.
+  * New check: checktoomanyproc_pgrep, checktoomanyproc_pgrep_full.
+
+ -- Marius Gedminas <marius@gedmin.as>  Mon, 21 Oct 2013 14:31:03 +0300
+
 pov-check-health (0.5.1) precise; urgency=low
 
   * check-virtualenvs: meaningful exit code (1 if outdated virtualenvs were

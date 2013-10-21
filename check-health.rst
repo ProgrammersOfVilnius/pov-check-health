@@ -7,8 +7,8 @@ check system health
 -------------------
 
 :Author: Marius Gedminas <marius@gedmin.as>
-:Date: 2013-10-15
-:Version: 0.5.1
+:Date: 2013-10-21
+:Version: 0.6.0
 :Manual section: 8
 
 
@@ -147,8 +147,30 @@ checkproc_pgrep_full <cmdline>
 checktoomanyproc <name> <limit>
   Check that fewer than <limit> instances of a given process is running.
 
+  See also: checktoomanyproc_pgrep, checktoomanyproc_pgrep_full.
+
 
   Example: ``checktoomanyproc aspell 2``
+
+
+checktoomanyproc_pgrep <name> <limit>
+  Check that fewer than <limit> instances of a given process is running.
+
+  Uses pgrep instead of pidof.
+
+
+  Example: ``checktoomanyproc_pgrep aspell tracd``
+
+
+checktoomanyproc_pgrep_full <limit> <cmdline>
+  Check that fewer than <limit> instances of a given process is running.
+
+  Uses pgrep -f instead of pidof, which makes it handle all sorts of things.
+
+
+  Example: ``checktoomanyproc_pgrep_full 2 scriptname.py``
+
+  Example: ``checktoomanyproc_pgrep_full 2 '/usr/bin/java -jar /usr/share/jenkins/jenkins.war'``
 
 
 checkram [<free>[M/G/T]]
