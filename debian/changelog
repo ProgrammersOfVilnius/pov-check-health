@@ -2,8 +2,9 @@ pov-check-health (0.6.0) UNRELEASED; urgency=low
 
   * checktoomanyproc now supports scripts by using pidof -x.
   * New check: checktoomanyproc_pgrep, checktoomanyproc_pgrep_full.
+  * check-health -g skips inode checks for nfs4, cifs, and vboxsf.
 
- -- Marius Gedminas <marius@gedmin.as>  Mon, 21 Oct 2013 14:31:03 +0300
+ -- Marius Gedminas <marius@gedmin.as>  Mon, 21 Oct 2013 14:38:18 +0300
 
 pov-check-health (0.5.1) precise; urgency=low
 

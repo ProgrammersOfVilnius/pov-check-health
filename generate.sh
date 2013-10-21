@@ -48,7 +48,7 @@ generate_checkinodes() {
     prefix "# Check free inodes"
     df -PT | { read header; while read device fstype size used free capacity mountpoint; do
         case $fstype in
-            tmpfs|devtmpfs|ecryptfs|nfs)
+            tmpfs|devtmpfs|ecryptfs|nfs|nfs4|cifs|vboxsf)
                 ;;
             *)
                 emit checkinodes $mountpoint
