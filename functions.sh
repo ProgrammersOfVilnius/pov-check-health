@@ -251,10 +251,12 @@ checktoomanyproc() {
 checktoomanyproc_pgrep() {
     info_check checktoomanyproc_pgrep $@
     out=$(pgrep $1)
-    if [ $? -ne 0 ]; then
-        warn "pgrep $1 failed: $out"
-        return
-    fi
+    case "$out" in
+        Usage:*)
+            warn "pgrep $1 failed: $out"
+            return
+            ;;
+    esac
     n=$(echo "$out"|wc -w)
     [ "$n" -ge "$2" ] && warn "More than $(($2-1)) copies ($n) of $1 running"
 }
@@ -271,10 +273,12 @@ checktoomanyproc_pgrep_full() {
     limit=$1
     shift
     out=$(pgrep -f "$@")
-    if [ $? -ne 0 ]; then
-        warn "pgrep -f $* failed: $out"
-        return
-    fi
+    case "$out" in
+        Usage:*)
+            warn "pgrep -f $* failed: $out"
+            return
+            ;;
+    esac
     n=$(echo "$out"|wc -w)
     [ "$n" -ge "$limit" ] && warn "More than $((limit-1)) copies ($n) of $* running"
 }
