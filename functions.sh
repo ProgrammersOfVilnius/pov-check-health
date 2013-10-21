@@ -12,6 +12,9 @@ if [ -t 1 ] && [ $(tput colors) -ge 8 ]; then
     purple='\033[35m'
     reset='\033[0m'
 fi
+if [ -z "$verbose" ]; then
+    verbose=0
+fi
 
 warn() {
     echo "$@" 1>&2
