@@ -233,12 +233,7 @@ checkproc_pgrep_full() {
 #   Example: checktoomanyproc aspell 2
 checktoomanyproc() {
     info_check checktoomanyproc $@
-    out=$(pidof -x $1)
-    if [ $? -ne 0 ]; then
-        warn "pidof -x $1 failed: $out"
-        return
-    fi
-    n=$(echo "$out"|wc -w)
+    n=$(pidof -x "$1"|wc -w)
     [ "$n" -ge "$2" ] && warn "More than $(($2-1)) copies ($n) of $1 running"
 }
 

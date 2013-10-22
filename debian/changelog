@@ -1,3 +1,10 @@
+pov-check-health (0.6.1) UNRELEASED; urgency=low
+
+  * checktoomanyproc: do not check the exit code of pidof, that's not an
+    indication of a command line syntax error (whoops!).
+
+ -- Marius Gedminas <marius@gedmin.as>  Tue, 22 Oct 2013 07:54:47 +0300
+
 pov-check-health (0.6.0) precise; urgency=low
 
   * checktoomanyproc now supports scripts by using pidof -x.
