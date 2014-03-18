@@ -145,11 +145,15 @@ checkinodes() {
 #   Example: checknfs /home
 checknfs() {
     info_check checknfs $@
-    [ -z "$(grep "$1 .* nfs " /proc/mounts)" ] && {
+    if [ -z "$(grep "$1 .* nfs " /proc/mounts)" ]; then
         warn "$1 is not NFS-mounted, trying to remount"
         mount -a -t nfs
-        [ -z "$(grep "$1 .* nfs " /proc/mounts)" ] && warn "... mount -a -t nfs didn't help"
-    }
+        if [ -z "$(grep "$1 .* nfs " /proc/mounts)" ]; then
+            warn "... mount -a -t nfs didn't help"
+        else
+            warn "... mount -a -t nfs helped"
+        fi
+    fi
 }
 
 # checkpidfile <filename>
