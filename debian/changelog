@@ -1,3 +1,10 @@
+pov-check-health (0.6.3) precise; urgency=medium
+
+  * Fix build failures due to forgotten version number update in the manual
+    page.
+
+ -- Marius Gedminas <marius@gedmin.as>  Tue, 16 Sep 2014 13:45:12 +0300
+
 pov-check-health (0.6.2) precise; urgency=medium
 
   * checknfs: handle nfs4 too.
