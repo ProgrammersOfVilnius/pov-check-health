@@ -1,3 +1,9 @@
+pov-check-health (0.6.2) precise; urgency=medium
+
+  * checknfs: handle nfs4 too.
+
+ -- Marius Gedminas <marius@gedmin.as>  Tue, 16 Sep 2014 13:38:54 +0300
+
 pov-check-health (0.6.1) precise; urgency=low
 
   * checktoomanyproc: do not check the exit code of pidof, that's not an
