@@ -306,7 +306,7 @@ checkswap() {
     info_check checkswap $@
     trip=$(_to_mb $1 100)
     used=$(free -m| awk '/^Swap/ {print $3}')
-    [ $used -gt $trip ] && warn "too much swap used ($used)"
+    [ $used -gt $trip ] && warn "too much swap used (${used}M)"
 }
 
 # checkmailq [<limit>]

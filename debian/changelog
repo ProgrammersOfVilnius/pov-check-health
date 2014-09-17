@@ -1,6 +1,7 @@
 pov-check-health (0.6.4) precise; urgency=medium
 
-  * checkmailq: fix postfix mailq parsing.
+  * checkswap: mention units in warning message (GH #1).
+  * checkmailq: fix postfix mailq parsing (GH #2).
 
  -- Marius Gedminas <marius@gedmin.as>  Wed, 17 Sep 2014 08:22:54 +0300
 
