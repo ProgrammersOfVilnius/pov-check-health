@@ -334,7 +334,7 @@ checkmailq() {
             # sendmail
             count=$(echo "$status" | awk '{print $3;}')
             ;;
-        "-- "*" Kbytes in "*" Request.")
+        "-- "*" Kbytes in "*" Request."|"-- "*" Kbytes in "*" Requests.")
             # postfix
             count=$(echo "$status" | awk '{print $5;}')
             ;;
