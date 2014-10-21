@@ -1,3 +1,9 @@
+pov-check-health (0.6.5) UNRELEASED; urgency=medium
+
+  * functions.sh: use printf instead of echo for portability (GH #3).
+
+ -- Marius Gedminas <marius@gedmin.as>  Tue, 21 Oct 2014 20:35:16 +0300
+
 pov-check-health (0.6.4) precise; urgency=medium
 
   * checkswap: mention units in warning message (GH #1).

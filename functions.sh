@@ -17,18 +17,18 @@ if [ -z "$verbose" ]; then
 fi
 
 warn() {
-    echo "$@" 1>&2
+    printf "%s\n" "$*" 1>&2
 }
 
 info() {
     if [ $verbose -gt 0 ]; then
-        echo "$@"
+        printf "%s\n" "$*"
     fi
 }
 
 info_check() {
     if [ $verbose -gt 0 ]; then
-        echo "${purple}+ $@${reset}"
+        printf "${purple}+ %s${reset}\n" "$*"
     fi
 }
 
