@@ -48,7 +48,7 @@ if [ $generate -ne 0 ]; then
     exit 0
 fi
 
-. $libdir/functions.sh
+. $libdir/functions.sh || exit 1
 
 if ! [ -f $configfile ]; then
     info "not performing any checks: $configfile doesn't exit"
