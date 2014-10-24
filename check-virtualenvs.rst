@@ -7,15 +7,16 @@ check for stale virtualenvs
 ---------------------------
 
 :Author: Marius Gedminas <marius@gedmin.as>
-:Date: 2013-10-04
-:Version: 0.5.1
+:Date: 2014-10-24
+:Version: 0.7.0
 :Manual section: 8
 
 
 SYNOPSIS
 ========
 
-**check-virtualenvs** [**-v**]
+**check-virtualenvs** [**-v**] [**-f**]
+**check-virtualenvs** **-h**]
 
 
 DESCRIPTION
@@ -29,6 +30,7 @@ OPTIONS
 =======
 
 -v           Verbose output
+-f           Fix the problems by overwriting outdated Python binaries
 
 
 BACKGROUND
@@ -43,6 +45,21 @@ the system Python executable, you end up with stale copies of the old
 versions in all your virtualenvs.  Sometimes this simply means you don't
 get the latest bugfixes.  Sometimes this breaks your virtualenvs
 completely.
+
+
+BUGS
+====
+
+This script relies on **locate**\ (1) to locate all virtualenvs.  The
+locate database may be outdated and the script will not notice.
+
+The logic for detecting a virtualenv is ad hoc and can produce false
+positives.
+
+This script cannot deal with a single virtualenv containing multiple
+Python versions.
+
+This script will break if you put spaces in your directory names.
 
 
 TROUBLESHOOTING

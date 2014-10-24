@@ -1,8 +1,14 @@
-pov-check-health (0.6.5) UNRELEASED; urgency=medium
+pov-check-health (0.7.0) precise; urgency=medium
 
   * functions.sh: use printf instead of echo for portability (GH #3).
+  * check-virtualenvs:
+    - new option -h to show help,
+    - new option -f to fix the virtualenvs,
+    - handle multi-python virtualenvs better,
+    - ignore /usr/lib/debug/usr/lib/python*,
+    - skip full Python installations.
 
- -- Marius Gedminas <marius@gedmin.as>  Tue, 21 Oct 2014 20:35:16 +0300
+ -- Marius Gedminas <marius@gedmin.as>  Fri, 24 Oct 2014 12:25:40 +0300
 
 pov-check-health (0.6.4) precise; urgency=medium
 
