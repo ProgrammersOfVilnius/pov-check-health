@@ -1,3 +1,13 @@
+pov-check-health (0.8.0) UNRELEASED; urgency=medium
+
+  * check-virtualenvs:
+    - colorize output,
+    - don't check symlinks,
+    - do check venv/bin/python[23],
+    - improve multi-Python version virtualenv handling.
+
+ -- Marius Gedminas <marius@gedmin.as>  Fri, 24 Oct 2014 13:03:53 +0300
+
 pov-check-health (0.7.0) precise; urgency=medium
 
   * functions.sh: use printf instead of echo for portability (GH #3).
