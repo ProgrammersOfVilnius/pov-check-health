@@ -14,6 +14,10 @@ The checks are configured in ``/etc/pov/check-health``, which is actually
 a shell file that is sourced from the cron script.  If this file is missing,
 ``check-health`` does nothing.
 
+You can generate a skeleton config file automatically with ::
+
+    check-health > /etc/pov/check-health
+
 Example configuration file::
 
     # Check that processes are running
@@ -59,7 +63,7 @@ report on the console.  Run ``check-health -v`` for more verbosity.  Run
 before the cron script takes over).  Run ``check-health -h`` for a brief usage
 notice::
 
-    Usage: check-health [-h] [-v] [-f configfile]
+    Usage: check-health [-h] [-v] [-f configfile] [-g]
 
 
 Available checks
