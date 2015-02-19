@@ -1,9 +1,14 @@
 pov-check-health for Debian
 ---------------------------
 
-To start, copy /usr/share/doc/pov-check-health/check-health.example to
-/etc/pov/check-health.  Edit to suit.  Run 'sudo check-health' to test.
+To start, run 'check-health -g > /etc/pov/check-health' to generate
+a new config file.  Edit to adjust to your local needs.  Run
+'check-health' to test.
 
-The cron script is enabled automatically.
+For website checks, run 'check-web-health -g > /etc/pov/check-web-health'
+to generate a config file, edit, run 'check-web-health' to test.
 
- -- Marius Gedminas <marius@pov.lt>  Mon, 22 Jul 2013 16:02:48 +0300
+The cron script is enabled automatically (see /etc/cron.d/pov-check-health
+for scheduling details) but does nothing if the config files are missing.
+
+ -- Marius Gedminas <marius@pov.lt>  Thu, 19 Feb 2015 13:29:48 +0300

@@ -1,12 +1,13 @@
-pov-check-health (0.8.0) UNRELEASED; urgency=medium
+pov-check-health (0.8.0) precise; urgency=medium
 
   * check-virtualenvs:
     - colorize output,
     - don't check symlinks,
     - do check venv/bin/python[23],
     - improve multi-Python version virtualenv handling.
+  * check-web-health: new script.
 
- -- Marius Gedminas <marius@gedmin.as>  Fri, 24 Oct 2014 13:03:53 +0300
+ -- Marius Gedminas <marius@gedmin.as>  Thu, 19 Feb 2015 13:07:28 +0200
 
 pov-check-health (0.7.0) precise; urgency=medium
 

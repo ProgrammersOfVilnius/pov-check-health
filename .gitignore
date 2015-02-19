@@ -6,3 +6,5 @@ check-health.8
 check-health
 pkgbuild
 check-virtualenvs.8
+check-web-health
+check-web-health.8

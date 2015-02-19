@@ -7,10 +7,16 @@
 #
 
 purple=
+red=
 reset=
+line_up=
 if [ -t 1 ] && [ $(tput colors) -ge 8 ]; then
     purple='\033[35m'
+    red='\033[31m'
     reset='\033[0m'
+fi
+if [ -t 1 ] && [ -t 2 ]; then
+    line_up='\033[A'
 fi
 if [ -z "$verbose" ]; then
     verbose=0
@@ -31,6 +37,15 @@ info_check() {
         printf "${purple}+ %s${reset}\n" "$*"
     fi
 }
+
+warn_check() {
+    if [ $verbose -eq 0 ]; then
+        printf "${red}+ %s${reset}\n" "$*" 1>&2
+    else
+        printf "${line_up}${red}+ %s${reset}\n" "$*" 1>&2
+    fi
+}
+
 
 # convert value to seconds
 # usage: x=$(_to_seconds number [default])
@@ -425,4 +440,39 @@ checkaliases() {
 checklilo() {
     info_check checklilo $@
     [ /boot/map -ot /vmlinuz ] && warn "lilo not updated after kernel upgrade"
+}
+
+
+# checkweb
+#   Check if a website is available over HTTP/HTTPS.
+#
+#   A thin wrapper around check_http from nagios-plugins-basic.  See
+#   https://www.monitoring-plugins.org/doc/man/check_http.html for the
+#   available options.
+#
+#   Normally you wouldn't use this from /etc/pov/check-web-health, and
+#   not from /etc/pov/check-health.
+#
+#   Example: checkweb -H www.example.com
+#   Example: checkweb --ssl -H www.example.com -u /prefix/ -f follow -s 'Expect this string' --timeout=30
+#   Example: checkweb --ssl -H www.example.com -u /protected/ -e 'HTTP/1.1 401 Unauthorized' -s 'Login required'
+#   Example: checkweb --ssl -H www.example.com --invert-regex -r "Database connection error"
+checkweb() {
+    info_check checkweb $@
+    output=$(/usr/lib/nagios/plugins/check_http "$@" 2>&1)
+    case "$output" in
+        HTTP\ OK:*)
+            info "$output"
+            ;;
+        CRITICAL\ -\ Socket\ timeout\ after\ *)
+            warn_check checkweb $@
+            warn "$output"
+            load=$(LC_ALL=C uptime|sed -e 's/^.*load/load/')
+            warn "$load"
+            ;;
+        *)
+            warn_check checkweb $@
+            warn "$output"
+            ;;
+    esac
 }

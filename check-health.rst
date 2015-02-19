@@ -7,8 +7,8 @@ check system health
 -------------------
 
 :Author: Marius Gedminas <marius@gedmin.as>
-:Date: 2014-10-24
-:Version: 0.7.0
+:Date: 2015-02-19
+:Version: 0.8.0
 :Manual section: 8
 
 
@@ -262,6 +262,26 @@ checklilo
 
   Example: ``checklilo``
 
+
+checkweb
+  Check if a website is available over HTTP/HTTPS.
+
+  A thin wrapper around check_http from nagios-plugins-basic.  See
+  https://www.monitoring-plugins.org/doc/man/check_http.html for the
+  available options.
+
+  Normally you wouldn't use this from /etc/pov/check-web-health, and
+  not from /etc/pov/check-health.
+
+
+  Example: ``checkweb -H www.example.com``
+
+  Example: ``checkweb --ssl -H www.example.com -u /prefix/ -f follow -s 'Expect this string' --timeout=30``
+
+  Example: ``checkweb --ssl -H www.example.com -u /protected/ -e 'HTTP/1.1 401 Unauthorized' -s 'Login required'``
+
+  Example: ``checkweb --ssl -H www.example.com --invert-regex -r "Database connection error"``
+
 .. end of generated chunk
 
 
@@ -324,3 +344,8 @@ won't be able to report problems.
 **check-health** is stateless and as such will keep reporting the same
 error once an hour (assuming default cron configuration) until you fix it.
 
+
+SEE ALSO
+========
+
+**check-web-health**\ (8)

@@ -125,6 +125,12 @@ generate_checkaliases() {
     emit checkaliases
 }
 
+generate_checkweb() {
+    for site in /etc/apache2/sites-enabled/*; do
+        awk '/<VirtualHost .*:80/ { ssl = "" } /<VirtualHost .*:443/ { ssl = " --ssl" } $1 == "ServerName" { print "checkweb", "-H", $2 ssl }' "$site"
+    done
+}
+
 
 generate() {
     prefix "#
@@ -140,4 +146,5 @@ generate() {
     generate_checkswap
     generate_checkmailq
     generate_checkaliases
+    # generate_checkweb is not called here because we want it separate
 }

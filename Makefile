@@ -16,12 +16,12 @@ VAGRANT_SSH_ALIAS = vagrantbox
 
 
 .PHONY: all
-all: check-health.8 check-health check-virtualenvs.8
+all: check-health.8 check-health check-web-health.8 check-web-health check-virtualenvs.8
 
 %.8: %.rst
 	rst2man $< > $@
 
-check-health: check-health.sh
+check-%: check-%.sh
 	sed -e 's,^libdir=\.$$,libdir=/usr/share/pov-check-health,' $< > $@
 
 .PHONY: test check
@@ -41,11 +41,11 @@ check-version:
 
 .PHONY: check-docs
 check-docs:
-	@./extract-documentation.py -c README.rst -c $(manpage) || echo "Run make update-docs please"
+	@./extract-documentation.py -c $(manpage) || echo "Run make update-docs please"
 
 .PHONY: update-docs
 update-docs:
-	./extract-documentation.py -u README.rst -u $(manpage)
+	./extract-documentation.py -u $(manpage)
 
 .PHONY: install
 install: check-health
@@ -53,6 +53,7 @@ install: check-health
 	install -D -m 644 generate.sh $(DESTDIR)/usr/share/pov-check-health/generate.sh
 	install -D -m 644 example.conf $(DESTDIR)/usr/share/doc/pov-check-health/check-health.example
 	install -D check-health $(DESTDIR)/usr/sbin/check-health
+	install -D check-web-health $(DESTDIR)/usr/sbin/check-web-health
 	install -D check-virtualenvs.sh $(DESTDIR)/usr/sbin/check-virtualenvs
 
 
@@ -60,7 +61,7 @@ VCS_STATUS = git status --porcelain
 
 .PHONY: clean-build-tree
 clean-build-tree:
-	@./extract-documentation.py -c README.rst -c $(manpage) || { echo "Run make update-docs please" 1>&2; exit 1; }
+	@./extract-documentation.py -c $(manpage) || { echo "Run make update-docs please" 1>&2; exit 1; }
 	@test -z "`$(VCS_STATUS) 2>&1`" || { echo; echo "Your working tree is not clean; please commit and try again" 1>&2; $(VCS_STATUS); exit 1; }
 	rm -rf pkgbuild/$(source)
 	git archive --format=tar --prefix=pkgbuild/$(source)/ HEAD | tar -xf -
