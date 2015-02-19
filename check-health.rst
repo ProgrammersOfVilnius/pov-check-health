@@ -8,7 +8,7 @@ check system health
 
 :Author: Marius Gedminas <marius@gedmin.as>
 :Date: 2015-02-19
-:Version: 0.8.0
+:Version: 0.8.1
 :Manual section: 8
 
 
@@ -281,6 +281,20 @@ checkweb
   Example: ``checkweb --ssl -H www.example.com -u /protected/ -e 'HTTP/1.1 401 Unauthorized' -s 'Login required'``
 
   Example: ``checkweb --ssl -H www.example.com --invert-regex -r "Database connection error"``
+
+
+checkweb_auth
+  Check if a website is available over HTTP/HTTPS.
+
+  ``checkweb_auth user:pwd args`` is equivalent to
+  ``checkweb -a user:pwd args`` but the username/password pair is not
+  printed if the check fails or in verbose mode.
+
+  (It's still visible to any local system user who can run 'ps' while
+  check-web-health is running.)
+
+
+  Example: ``checkweb_auth username:password -H www.example.com``
 
 .. end of generated chunk
 

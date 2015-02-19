@@ -1,3 +1,9 @@
+pov-check-health (0.8.1) precise; urgency=medium
+
+  * New check: checkweb_auth.
+
+ -- Marius Gedminas <marius@gedmin.as>  Thu, 19 Feb 2015 14:04:41 +0200
+
 pov-check-health (0.8.0) precise; urgency=medium
 
   * check-virtualenvs:

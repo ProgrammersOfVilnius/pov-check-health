@@ -476,3 +476,36 @@ checkweb() {
             ;;
     esac
 }
+
+# checkweb_auth
+#   Check if a website is available over HTTP/HTTPS.
+#
+#   ``checkweb_auth user:pwd args`` is equivalent to
+#   ``checkweb -a user:pwd args`` but the username/password pair is not
+#   printed if the check fails or in verbose mode.
+#
+#   (It's still visible to any local system user who can run 'ps' while
+#   check-web-health is running.)
+#
+#   Example: checkweb_auth username:password -H www.example.com
+checkweb_auth() {
+    creds="$1"
+    shift
+    info_check checkweb_auth "*secret*" $@
+    output=$(/usr/lib/nagios/plugins/check_http -a "$creds" "$@" 2>&1)
+    case "$output" in
+        HTTP\ OK:*)
+            info "$output"
+            ;;
+        CRITICAL\ -\ Socket\ timeout\ after\ *)
+            warn_check checkweb_auth "*secret*" $@
+            warn "$output"
+            load=$(LC_ALL=C uptime|sed -e 's/^.*load/load/')
+            warn "$load"
+            ;;
+        *)
+            warn_check checkweb_auth "*secret*" $@
+            warn "$output"
+            ;;
+    esac
+}
