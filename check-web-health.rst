@@ -57,7 +57,8 @@ https://www.monitoring-plugins.org/doc/man/check_http.html for the
 available options.
 
 Technically you may also use any of the other checks from **check-health**\ (8),
-but why would you want to do that?
+but why would you want to do that?  Except maybe `checkuptime`, to suppress the other
+checks while the server is still booting.
 
 
 EXAMPLES
