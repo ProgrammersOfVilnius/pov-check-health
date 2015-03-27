@@ -178,8 +178,9 @@ checknfs() {
 checkpidfile() {
     info_check checkpidfile $@
     [ -f $1 ] || { warn "$1: pidfile missing"; return; }
-    pid="$(cat $1)"
-    test -d "/proc/$pid" || warn "$1: stale pidfile ($pid)"
+    for pid in $(cat $1); do
+        test -d "/proc/$pid" || warn "$1: stale pidfile ($pid)"
+    done
 }
 
 # checkpidfiles <filename> ...
