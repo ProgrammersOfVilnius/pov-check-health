@@ -37,7 +37,11 @@ generate_checkfs() {
             tmpfs|devtmpfs|ecryptfs|nfs|vboxsf)
                 ;;
             *)
-                emit "checkfs $mountpoint		100M"
+                if [ $free -gt 1048576 ]; then
+                    emit "checkfs $mountpoint		1G"
+                else
+                    emit "checkfs $mountpoint		100M"
+                fi
                 ;;
         esac
     done; }
