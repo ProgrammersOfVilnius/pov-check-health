@@ -1,9 +1,9 @@
-pov-check-health (0.8.3) UNRELEASED; urgency=medium
+pov-check-health (0.8.3) precise; urgency=medium
 
   * check-health -g: require 1G free disk space for partitions that have more
     than 1G free.
 
- -- Marius Gedminas <marius@gedmin.as>  Tue, 21 Apr 2015 12:45:10 +0300
+ -- Marius Gedminas <marius@gedmin.as>  Tue, 21 Apr 2015 13:20:15 +0300
 
 pov-check-health (0.8.2) precise; urgency=medium
 
