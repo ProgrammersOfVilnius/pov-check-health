@@ -3,6 +3,7 @@ pov-check-health (0.9.0) UNRELEASED; urgency=medium
   * Fixed most shellcheck warnings.  This should've improved reliablility
     (especially if you have file or directory names with spaces in them), but
     might've introduced bugs.
+  * New checks: checkcert, checkcert_imaps, checkcert_ssmtp.
 
  -- Marius Gedminas <marius@gedmin.as>  Wed, 19 Aug 2015 09:30:36 +0300
 

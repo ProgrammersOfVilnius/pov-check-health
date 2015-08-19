@@ -442,7 +442,6 @@ checklilo() {
     [ /boot/map -ot /vmlinuz ] && warn "lilo not updated after kernel upgrade"
 }
 
-
 # checkweb
 #   Check if a website is available over HTTP/HTTPS.
 #
@@ -457,6 +456,8 @@ checklilo() {
 #   Example: checkweb --ssl -H www.example.com -u /prefix/ -f follow -s 'Expect this string' --timeout=30
 #   Example: checkweb --ssl -H www.example.com -u /protected/ -e 'HTTP/1.1 401 Unauthorized' -s 'Login required'
 #   Example: checkweb --ssl -H www.example.com --invert-regex -r "Database connection error"
+#
+#   This function is normally used from /etc/pov/check-web-health.
 checkweb() {
     info_check checkweb "$@"
     output=$(/usr/lib/nagios/plugins/check_http "$@" 2>&1)
@@ -488,6 +489,8 @@ checkweb() {
 #   check-web-health is running.)
 #
 #   Example: checkweb_auth username:password -H www.example.com
+#
+#   This function is normally used from /etc/pov/check-web-health.
 checkweb_auth() {
     creds="$1"
     shift
@@ -505,6 +508,78 @@ checkweb_auth() {
             ;;
         *)
             warn_check checkweb_auth "*secret*" "$@"
+            warn "$output"
+            ;;
+    esac
+}
+
+# checkcert <hostname> [<days>]
+#   Check if the SSL certificate of a website is close to expiration.
+#
+#   <days> defaults to 60.
+#
+#   Example: checkcert www.example.com
+#
+#   This function is normally used from /etc/pov/check-ssl-certs.
+checkcert() {
+    info_check checkcert "$@"
+    local server=$1
+    local days=${2:-60}
+    local output=$(/usr/lib/nagios/plugins/check_http -C "$days" -H "$server" --sni 2>&1)
+    case "$output" in
+        OK\ *)
+            info "$output"
+            ;;
+        *)
+            warn_check checkcert "$@"
+            warn "$output"
+            ;;
+    esac
+}
+
+# checkcert_ssmtp <hostname> [<days>]
+#   Check if the SSL certificate of an SSMTP server is close to expiration.
+#
+#   <days> defaults to 60.
+#
+#   Example: checkcert_ssmtp mail.example.com
+#
+#   This function is normally used from /etc/pov/check-ssl-certs.
+checkcert_ssmtp() {
+    info_check checkcert_ssmtp "$@"
+    local server=$1
+    local days=${2:-60}
+    local output=$(/usr/lib/nagios/plugins/check_ssmtp -D "$days" -H "$server" -p 465 --ssl 2>&1)
+    case "$output" in
+        OK\ *)
+            info "$output"
+            ;;
+        *)
+            warn_check checkcert_ssmtp "$@"
+            warn "$output"
+            ;;
+    esac
+}
+
+# checkcert_imaps <hostname> [<days>]
+#   Check if the SSL certificate of an IMAPS server is close to expiration.
+#
+#   <days> defaults to 60.
+#
+#   Example: checkcert_imaps mail.example.com
+#
+#   This function is normally used from /etc/pov/check-ssl-certs.
+checkcert_imaps() {
+    info_check checkcert_imaps "$@"
+    local server=$1
+    local days=${2:-60}
+    local output=$(/usr/lib/nagios/plugins/check_imap -D "$days" -H "$server" -p 993 --ssl 2>&1)
+    case "$output" in
+        OK\ *)
+            info "$output"
+            ;;
+        *)
+            warn_check checkcert_imaps "$@"
             warn "$output"
             ;;
     esac

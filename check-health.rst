@@ -282,6 +282,8 @@ checkweb
 
   Example: ``checkweb --ssl -H www.example.com --invert-regex -r "Database connection error"``
 
+  This function is normally used from /etc/pov/check-web-health.
+
 
 checkweb_auth
   Check if a website is available over HTTP/HTTPS.
@@ -295,6 +297,41 @@ checkweb_auth
 
 
   Example: ``checkweb_auth username:password -H www.example.com``
+
+  This function is normally used from /etc/pov/check-web-health.
+
+
+checkcert <hostname> [<days>]
+  Check if the SSL certificate of a website is close to expiration.
+
+  <days> defaults to 60.
+
+
+  Example: ``checkcert www.example.com``
+
+  This function is normally used from /etc/pov/check-ssl-certs.
+
+
+checkcert_ssmtp <hostname> [<days>]
+  Check if the SSL certificate of an SSMTP server is close to expiration.
+
+  <days> defaults to 60.
+
+
+  Example: ``checkcert_ssmtp mail.example.com``
+
+  This function is normally used from /etc/pov/check-ssl-certs.
+
+
+checkcert_imaps <hostname> [<days>]
+  Check if the SSL certificate of an IMAPS server is close to expiration.
+
+  <days> defaults to 60.
+
+
+  Example: ``checkcert_imaps mail.example.com``
+
+  This function is normally used from /etc/pov/check-ssl-certs.
 
 .. end of generated chunk
 
