@@ -3,6 +3,7 @@ version := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
 date := $(shell dpkg-parsechangelog | grep ^Date: | cut -d: -f 2- | date --date="$$(cat)" +%Y-%m-%d)
 
 manpage = check-health.rst
+manpages = check-health.rst check-web-health.rst check-virtualenvs.rst
 
 # for testing in vagrant:
 #   vagrant box add precise64 http://files.vagrantup.com/precise64.box
@@ -30,14 +31,16 @@ test check: check-version check-docs
 
 .PHONY: checkversion
 check-version:
-	@grep -q ":Version: $(version)" $(manpage) || { \
-	    echo "Version number in $(manpage) doesn't match debian/changelog ($(version))" 2>&1; \
-	    exit 1; \
-	}
-	@grep -q ":Date: $(date)" $(manpage) || { \
-	    echo "Date in $(manpage) doesn't match debian/changelog ($(date))" 2>&1; \
-	    exit 1; \
-	}
+	@for fn in $(manpages); do \
+	    grep -q ":Version: $(version)" $$fn || { \
+	        echo "Version number in $$fn doesn't match debian/changelog ($(version))" 2>&1; \
+	        exit 1; \
+	    }; \
+	    grep -q ":Date: $(date)" $$fn || { \
+	        echo "Date in $$fn doesn't match debian/changelog ($(date))" 2>&1; \
+	        exit 1; \
+	    }; \
+	done
 
 .PHONY: check-docs
 check-docs:
