@@ -35,10 +35,10 @@ while getopts hvgf: OPT; do
     esac
 done
 
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
 if [ $# -ne 0 ]; then
-    echo $usage 1>&2
+    echo "$usage" 1>&2
     exit 1
 fi
 
@@ -55,11 +55,11 @@ fi
 
 . $libdir/functions.sh || exit 1
 
-if ! [ -f $configfile ]; then
+if ! [ -f "$configfile" ]; then
     info "not performing any checks: $configfile doesn't exist"
     exit 0
 fi
 
-. $configfile
+. "$configfile"
 
 exit 0

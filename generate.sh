@@ -8,10 +8,10 @@ prefix_called=0
 prefix() {
     if [ $prefix_called -ne 0 ]; then
         pending="$pending
-$@
+$*
 "
     else
-        pending="$@
+        pending="$*
 "
         prefix_called=1
     fi
@@ -19,10 +19,10 @@ $@
 
 emit() {
     if [ -n "$pending" ]; then
-        echo -n "$pending"
+        printf "%s" "$pending"
         pending=
     fi
-    echo "$@"
+    printf "%s\n" "$*"
 }
 
 separator() {
@@ -37,7 +37,7 @@ generate_checkfs() {
             tmpfs|devtmpfs|ecryptfs|nfs|vboxsf)
                 ;;
             *)
-                if [ $free -gt 1048576 ]; then
+                if [ "$free" -gt 1048576 ]; then
                     emit "checkfs $mountpoint		1G"
                 else
                     emit "checkfs $mountpoint		100M"
@@ -55,7 +55,7 @@ generate_checkinodes() {
             tmpfs|devtmpfs|ecryptfs|nfs|nfs4|cifs|vboxsf)
                 ;;
             *)
-                emit checkinodes $mountpoint
+                emit checkinodes "$mountpoint"
                 ;;
         esac
     done; }
@@ -88,7 +88,7 @@ generate_checkproc() {
                 emit "checkproc master # postfix"
                 ;;
             collectdmon)
-                emit checkproc $cmd
+                emit checkproc "$cmd"
                 emit checkproc collectd
                 # two collectds will fill up syslog with rrd errors
                 emit checktoomanyproc collectd 2
@@ -102,7 +102,7 @@ generate_checkproc() {
                 emit checkproc_pgrep_full '^/usr/sbin/postgrey'
                 ;;
             *)
-                emit checkproc $cmd
+                emit checkproc "$cmd"
                 ;;
         esac
     done

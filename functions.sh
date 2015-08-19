@@ -10,7 +10,7 @@ purple=
 red=
 reset=
 line_up=
-if [ -t 1 ] && [ $(tput colors) -ge 8 ]; then
+if [ -t 1 ] && [ "$(tput colors)" -ge 8 ]; then
     purple='\033[35m'
     red='\033[31m'
     reset='\033[0m'
@@ -51,17 +51,17 @@ warn_check() {
 # usage: x=$(_to_seconds number [default])
 _to_seconds() {
     case $1 in
-        "") echo $2;;
-        *sec) echo ${1%sec};;
-        *s) echo ${1%s};;
-        *S) echo ${1%S};;
+        "") echo "$2";;
+        *sec) echo "${1%sec}";;
+        *s) echo "${1%s}";;
+        *S) echo "${1%S}";;
         *min) echo $((${1%min} * 60));;
         *m) echo $((${1%m} * 60));;
         *M) echo $((${1%M} * 60));;
         *hour) echo $((${1%hour} * 60 * 60));;
         *h) echo $((${1%h} * 60 * 60));;
         *H) echo $((${1%H} * 60 * 60));;
-        *)  echo $1;;
+        *)  echo "$1";;
     esac
 }
 
@@ -69,16 +69,16 @@ _to_seconds() {
 # usage: x=$(_to_kb number [default])
 _to_kb() {
     case $1 in
-        "") echo $2;;
-        *k) echo ${1%k};;
-        *K) echo ${1%K};;
-        *m) echo ${1%m}000;;
-        *M) echo ${1%M}000;;
-        *g) echo ${1%g}000000;;
-        *G) echo ${1%G}000000;;
-        *t) echo ${1%t}000000000;;
-        *T) echo ${1%T}000000000;;
-        *)  echo $1;;
+        "") echo "$2";;
+        *k) echo "${1%k}";;
+        *K) echo "${1%K}";;
+        *m) echo "${1%m}000";;
+        *M) echo "${1%M}000";;
+        *g) echo "${1%g}000000";;
+        *G) echo "${1%G}000000";;
+        *t) echo "${1%t}000000000";;
+        *T) echo "${1%T}000000000";;
+        *)  echo "$1";;
     esac
 }
 
@@ -86,14 +86,14 @@ _to_kb() {
 # usage: x=$(_to_mb number [default])
 _to_mb() {
     case $1 in
-        "") echo $2;;
-        *m) echo ${1%m};;
-        *M) echo ${1%M};;
-        *g) echo ${1%g}000;;
-        *G) echo ${1%G}000;;
-        *t) echo ${1%t}000000;;
-        *T) echo ${1%T}000000;;
-        *)  echo $1;;
+        "") echo "$2";;
+        *m) echo "${1%m}";;
+        *M) echo "${1%M}";;
+        *g) echo "${1%g}000";;
+        *G) echo "${1%G}000";;
+        *t) echo "${1%t}000000";;
+        *T) echo "${1%T}000000";;
+        *)  echo "$1";;
     esac
 }
 
@@ -109,10 +109,10 @@ _to_mb() {
 #
 #   Example: checkuptime 10m
 checkuptime() {
-    info_check checkuptime $@
-    want=$(_to_seconds $1 600)
+    info_check checkuptime "$@"
+    want=$(_to_seconds "$1" 600)
     uptime=$(cut /proc/uptime -d . -f 1)
-    if [ $uptime -lt $want ]; then
+    if [ "$uptime" -lt "$want" ]; then
         info "uptime less than $want seconds, skipping the rest of the checks"
         exit 0
     fi
@@ -126,11 +126,11 @@ checkuptime() {
 #
 #   Example: checkfs / 100M
 checkfs() {
-    info_check checkfs $@
-    need=$(_to_kb $2 1000)
-    free=$(df -P -k $1 | awk 'NR==2 { print $4; }')
+    info_check checkfs "$@"
+    need=$(_to_kb "$2" 1000)
+    free=$(df -P -k "$1" | awk 'NR==2 { print $4; }')
     [ -z "$free" ] && { warn "couldn't figure out free space in $1"; return; }
-    [ $free -lt $need ] && warn "$1 is low on disk space ($free)"
+    [ "$free" -lt "$need" ] && warn "$1 is low on disk space ($free)"
 }
 
 # checkinodes <mountpoint> [<inodes>]
@@ -141,10 +141,10 @@ checkfs() {
 #
 #   Example: checkinodes /
 checkinodes() {
-    info_check checkinodes $@
+    info_check checkinodes "$@"
     need=${2:-5000}
-    free=$(df -P -i $1 | awk 'NR==2 { print $4; }')
-    [ $free -lt $need ] && warn "$1 is low on inodes ($free)"
+    free=$(df -P -i "$1" | awk 'NR==2 { print $4; }')
+    [ "$free" -lt "$need" ] && warn "$1 is low on inodes ($free)"
 }
 
 # checknfs <mountpoint>
@@ -159,7 +159,7 @@ checkinodes() {
 #
 #   Example: checknfs /home
 checknfs() {
-    info_check checknfs $@
+    info_check checknfs "$@"
     if [ -z "$(grep "$1 .* nfs4\? " /proc/mounts)" ]; then
         warn "$1 is not NFS-mounted, trying to remount"
         mount -a -t nfs
@@ -176,9 +176,9 @@ checknfs() {
 #
 #   Example: checkpidfile /var/run/crond.pid
 checkpidfile() {
-    info_check checkpidfile $@
-    [ -f $1 ] || { warn "$1: pidfile missing"; return; }
-    for pid in $(cat $1); do
+    info_check checkpidfile "$@"
+    [ -f "$1" ] || { warn "$1: pidfile missing"; return; }
+    for pid in $(cat "$1"); do
         test -d "/proc/$pid" || warn "$1: stale pidfile ($pid)"
     done
 }
@@ -204,10 +204,9 @@ checkpidfiles() {
                 info "ignoring $pidfile since it's always stale"
                 ;;
             *)
-                checkpidfile $pidfile
+                checkpidfile "$pidfile"
                 ;;
         esac
-
     done
 }
 
@@ -218,8 +217,8 @@ checkpidfiles() {
 #
 #   Example: checkproc crond
 checkproc() {
-    info_check checkproc $@
-    [ -z "$(pidof -s -x $1)" ] && warn "$1 is not running"
+    info_check checkproc "$@"
+    [ -z "$(pidof -s -x "$1")" ] && warn "$1 is not running"
 }
 
 # checkproc_pgrep <name>
@@ -229,8 +228,8 @@ checkproc() {
 #
 #   Example: checkproc_pgrep tracd
 checkproc_pgrep() {
-    info_check checkproc_pgrep $@
-    [ -z "$(pgrep $1)" ] && warn "$1 is not running"
+    info_check checkproc_pgrep "$@"
+    [ -z "$(pgrep "$1")" ] && warn "$1 is not running"
 }
 
 # checkproc_pgrep_full <cmdline>
@@ -241,7 +240,7 @@ checkproc_pgrep() {
 #   Example: checkproc_pgrep_full scriptname.py
 #   Example: checkproc_pgrep_full '/usr/bin/java -jar /usr/share/jenkins/jenkins.war'
 checkproc_pgrep_full() {
-    info_check checkproc_pgrep_full $@
+    info_check checkproc_pgrep_full "$@"
     [ -z "$(pgrep -f "$@")" ] && warn "$1 is not running"
 }
 
@@ -252,7 +251,7 @@ checkproc_pgrep_full() {
 #
 #   Example: checktoomanyproc aspell 2
 checktoomanyproc() {
-    info_check checktoomanyproc $@
+    info_check checktoomanyproc "$@"
     n=$(pidof -x "$1"|wc -w)
     [ "$n" -ge "$2" ] && warn "More than $(($2-1)) copies ($n) of $1 running"
 }
@@ -264,8 +263,8 @@ checktoomanyproc() {
 #
 #   Example: checktoomanyproc_pgrep tracd 2
 checktoomanyproc_pgrep() {
-    info_check checktoomanyproc_pgrep $@
-    out=$(pgrep $1)
+    info_check checktoomanyproc_pgrep "$@"
+    out=$(pgrep "$1")
     case "$out" in
         Usage:*)
             warn "pgrep $1 failed: $out"
@@ -284,7 +283,7 @@ checktoomanyproc_pgrep() {
 #   Example: checktoomanyproc_pgrep_full 2 scriptname.py
 #   Example: checktoomanyproc_pgrep_full 2 '/usr/bin/java -jar /usr/share/jenkins/jenkins.war'
 checktoomanyproc_pgrep_full() {
-    info_check checktoomanyproc_pgrep_full $@
+    info_check checktoomanyproc_pgrep_full "$@"
     limit=$1
     shift
     out=$(pgrep -f "$@")
@@ -306,10 +305,10 @@ checktoomanyproc_pgrep_full() {
 #
 #   Example: checkram 100M
 checkram() {
-    info_check checkram $@
-    need=$(_to_mb $1 100)
+    info_check checkram "$@"
+    need=$(_to_mb "$1" 100)
     free=$(free -mt | awk '$1 ~ /^Total/ { print $4; }')
-    [ $free -lt $need ] && warn "low on virtual memory ($free)"
+    [ "$free" -lt "$need" ] && warn "low on virtual memory ($free)"
 }
 
 # checkswap [<limit>[M/G/T]]
@@ -319,10 +318,10 @@ checkram() {
 #
 #   Example: checkswap 2G
 checkswap() {
-    info_check checkswap $@
-    trip=$(_to_mb $1 100)
+    info_check checkswap "$@"
+    trip=$(_to_mb "$1" 100)
     used=$(free -m| awk '/^Swap/ {print $3}')
-    [ $used -gt $trip ] && warn "too much swap used (${used}M)"
+    [ "$used" -gt "$trip" ] && warn "too much swap used (${used}M)"
 }
 
 # checkmailq [<limit>]
@@ -335,7 +334,7 @@ checkswap() {
 #
 #   Example: checkmailq 100
 checkmailq() {
-    info_check checkmailq $@
+    info_check checkmailq "$@"
     limit=${1:-20}
     status=$(mailq 2>&1| tail -n 1)
     case "$status" in
@@ -359,7 +358,7 @@ checkmailq() {
             return
             ;;
     esac
-    [ $count -gt $limit ] && warn "mail queue is large ($count requests)"
+    [ "$count" -gt "$limit" ] && warn "mail queue is large ($count requests)"
 }
 
 # checkzopemailq <path> ...
@@ -370,7 +369,7 @@ checkmailq() {
 #
 #   Example: checkzopemailq /apps/zopes/*/var/mailqueue/new
 checkzopemailq() {
-    info_check checkzopemailq $@
+    info_check checkzopemailq "$@"
     for f in $(find "$@" -type f -mmin +1); do
         warn "stale zope mail message: $f"
     done
@@ -388,11 +387,11 @@ checkzopemailq() {
 #
 #   Example: checkcups cheese
 checkcups() {
-    info_check checkcups $@
+    info_check checkcups "$@"
     queuename=$1
-    lpq $queuename | grep -s -q "^$queuename is not ready$" && {
+    lpq "$queuename" | grep -s -q "^$queuename is not ready$" && {
         warn "printer $1 is not ready, trying to enable"
-        cupsenable $1
+        cupsenable "$1"
     }
 }
 
@@ -405,7 +404,7 @@ checkcups() {
 #
 #   Example: cmpfiles /etc/init.d/someservice /home/someservice/initscript
 cmpfiles() {
-    info_check cmpfiles $@
+    info_check cmpfiles "$@"
     file1="$1"
     file2="$2"
     cmp -s "$file1" "$file2" || {
@@ -424,7 +423,7 @@ cmpfiles() {
 #
 #   Example: checkaliases
 checkaliases() {
-    info_check checkaliases $@
+    info_check checkaliases "$@"
     [ /etc/aliases.db -ot /etc/aliases ] && {
         warn "/etc/aliases.db out of date; run newaliases"
     }
@@ -439,7 +438,7 @@ checkaliases() {
 #
 #   Example: checklilo
 checklilo() {
-    info_check checklilo $@
+    info_check checklilo "$@"
     [ /boot/map -ot /vmlinuz ] && warn "lilo not updated after kernel upgrade"
 }
 
@@ -459,20 +458,20 @@ checklilo() {
 #   Example: checkweb --ssl -H www.example.com -u /protected/ -e 'HTTP/1.1 401 Unauthorized' -s 'Login required'
 #   Example: checkweb --ssl -H www.example.com --invert-regex -r "Database connection error"
 checkweb() {
-    info_check checkweb $@
+    info_check checkweb "$@"
     output=$(/usr/lib/nagios/plugins/check_http "$@" 2>&1)
     case "$output" in
         HTTP\ OK:*)
             info "$output"
             ;;
         CRITICAL\ -\ Socket\ timeout\ after\ *)
-            warn_check checkweb $@
+            warn_check checkweb "$@"
             warn "$output"
             load=$(LC_ALL=C uptime|sed -e 's/^.*load/load/')
             warn "$load"
             ;;
         *)
-            warn_check checkweb $@
+            warn_check checkweb "$@"
             warn "$output"
             ;;
     esac
@@ -492,20 +491,20 @@ checkweb() {
 checkweb_auth() {
     creds="$1"
     shift
-    info_check checkweb_auth "*secret*" $@
+    info_check checkweb_auth "*secret*" "$@"
     output=$(/usr/lib/nagios/plugins/check_http -a "$creds" "$@" 2>&1)
     case "$output" in
         HTTP\ OK:*)
             info "$output"
             ;;
         CRITICAL\ -\ Socket\ timeout\ after\ *)
-            warn_check checkweb_auth "*secret*" $@
+            warn_check checkweb_auth "*secret*" "$@"
             warn "$output"
             load=$(LC_ALL=C uptime|sed -e 's/^.*load/load/')
             warn "$load"
             ;;
         *)
-            warn_check checkweb_auth "*secret*" $@
+            warn_check checkweb_auth "*secret*" "$@"
             warn "$output"
             ;;
     esac
