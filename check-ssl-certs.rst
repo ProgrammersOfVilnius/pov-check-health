@@ -17,6 +17,8 @@ SYNOPSIS
 
 **check-ssl-certs** [**-v**] [**-f** *configfile*]
 
+**check-ssl-certs** **-g** > *configfile*
+
 **check-ssl-certs** **-h**
 
 
@@ -28,6 +30,9 @@ basic system health checks.  The checks are specified in the configuration
 file ``/etc/pov/check-ssl-certs``; if that file doesn't exist,
 **check-ssl-certs** will exit silently without checking anything.
 
+You can run ``check-ssl-certs -g`` to generate a config file.  You'll probably
+need to modify it to suit your needs.
+
 Usually **check-ssl-certs** is run automatically from cron, once a day.
 It doesn't emit any output and returns exit code 0 if all checks pass.
 Any output indicates an error, and cron emails it to ``root``.
@@ -38,6 +43,7 @@ OPTIONS
 
 -h           Print brief usage message and exit.
 -v           Verbose output: show what checks are being performed.
+-g           Generate a sample config file and print it to stdout.
 -f FILENAME  Use the specified config file instead of ``/etc/pov/check-ssl-certs``.
 
 

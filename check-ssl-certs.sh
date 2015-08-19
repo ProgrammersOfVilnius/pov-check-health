@@ -4,6 +4,7 @@ PATH=/usr/sbin:/usr/bin:/sbin:/bin
 export PATH
 
 usage="Usage: check-ssl-certs [-v] [-f configfile]
+       check-ssl-certs -g > configfile
        check-ssl-certs -h"
 
 verbose=0
@@ -22,8 +23,6 @@ while getopts hvgf: OPT; do
             exit 0
             ;;
         g)
-            echo "$0: generation is not supported yet" 1>&2
-            exit 1
             generate=1
             ;;
         f)

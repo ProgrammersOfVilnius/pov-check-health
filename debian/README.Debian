@@ -8,8 +8,8 @@ a new config file.  Edit to adjust to your local needs.  Run
 For website checks, run 'check-web-health -g > /etc/pov/check-web-health'
 to generate a config file, edit, run 'check-web-health' to test.
 
-For SSL certificate checks, edit /etc/pov/check-ssl-certs by hand.  Run
-'check-ssl-certs -v' to test.
+For SSL certificate checks, run 'check-ssl-certs -g > /etc/pov/check-ssl-certs'
+to generate a config file, edit, run 'check-ssl-certs -v' to test.
 
 The cron script is enabled automatically (see /etc/cron.d/pov-check-health
 for scheduling details) but does nothing if the config files are missing.

@@ -135,6 +135,12 @@ generate_checkweb() {
     done
 }
 
+generate_checkcert() {
+    for site in /etc/apache2/sites-enabled/*; do
+        awk '/<VirtualHost .*:80/ { ssl = 0 } /<VirtualHost .*:443/ { ssl = 1 } $1 == "ServerName" && ssl == 1 { print "checkcert", $2 }' "$site"
+    done
+}
+
 
 generate() {
     prefix "#
@@ -151,4 +157,5 @@ generate() {
     generate_checkmailq
     generate_checkaliases
     # generate_checkweb is not called here because we want it separate
+    # generate_checkcert is not called here because we want it separate
 }
