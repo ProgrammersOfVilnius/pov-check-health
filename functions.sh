@@ -523,9 +523,9 @@ checkweb_auth() {
 #   This function is normally used from /etc/pov/check-ssl-certs.
 checkcert() {
     info_check checkcert "$@"
-    local server=$1
-    local days=${2:-60}
-    local output=$(/usr/lib/nagios/plugins/check_http -C "$days" -H "$server" --sni 2>&1)
+    local server="$1"
+    local days="${2:-60}"
+    local output="$(/usr/lib/nagios/plugins/check_http -C "$days" -H "$server" --sni 2>&1)"
     case "$output" in
         OK\ *)
             info "$output"
@@ -547,9 +547,9 @@ checkcert() {
 #   This function is normally used from /etc/pov/check-ssl-certs.
 checkcert_ssmtp() {
     info_check checkcert_ssmtp "$@"
-    local server=$1
-    local days=${2:-60}
-    local output=$(/usr/lib/nagios/plugins/check_ssmtp -D "$days" -H "$server" -p 465 --ssl 2>&1)
+    local server="$1"
+    local days="${2:-60}"
+    local output="$(/usr/lib/nagios/plugins/check_ssmtp -D "$days" -H "$server" -p 465 --ssl 2>&1)"
     case "$output" in
         OK\ *)
             info "$output"
@@ -571,9 +571,9 @@ checkcert_ssmtp() {
 #   This function is normally used from /etc/pov/check-ssl-certs.
 checkcert_imaps() {
     info_check checkcert_imaps "$@"
-    local server=$1
-    local days=${2:-60}
-    local output=$(/usr/lib/nagios/plugins/check_imap -D "$days" -H "$server" -p 993 --ssl 2>&1)
+    local server="$1"
+    local days="${2:-60}"
+    local output="$(/usr/lib/nagios/plugins/check_imap -D "$days" -H "$server" -p 993 --ssl 2>&1)"
     case "$output" in
         OK\ *)
             info "$output"
