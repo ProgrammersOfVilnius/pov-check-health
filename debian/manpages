@@ -1,3 +1,4 @@
 check-health.8
 check-web-health.8
+check-ssl-certs.8
 check-virtualenvs.8

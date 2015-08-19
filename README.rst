@@ -88,6 +88,16 @@ Also, the default cron configuration runs the website checks four times an
 hour instead of once an hour.
 
 
+check-ssl-certs
+~~~~~~~~~~~~~~~
+
+This is the same script as ``check-ssl-certs``, only it uses a different
+config file (``/etc/pov/check-ssl-certs``).
+
+The default cron configuration runs the SSL certificate expiration checks
+once a day.
+
+
 check-virtualenvs
 ~~~~~~~~~~~~~~~~~
 

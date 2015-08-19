@@ -399,4 +399,4 @@ error once an hour (assuming default cron configuration) until you fix it.
 SEE ALSO
 ========
 
-**check-web-health**\ (8)
+**check-web-health**\ (8), **check-ssl-certs**\ (8)

@@ -8,3 +8,5 @@ pkgbuild
 check-virtualenvs.8
 check-web-health
 check-web-health.8
+check-ssl-certs
+check-ssl-certs.8

@@ -2,8 +2,10 @@ source := $(shell dpkg-parsechangelog | awk '$$1 == "Source:" { print $$2 }')
 version := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
 date := $(shell dpkg-parsechangelog | grep ^Date: | cut -d: -f 2- | date --date="$$(cat)" +%Y-%m-%d)
 
+manpages = check-health.rst check-web-health.rst check-virtualenvs.rst check-ssl-certs.rst
+
+# the main manpage that documents all the functions
 manpage = check-health.rst
-manpages = check-health.rst check-web-health.rst check-virtualenvs.rst
 
 # for testing in vagrant:
 #   vagrant box add precise64 http://files.vagrantup.com/precise64.box
@@ -17,7 +19,7 @@ VAGRANT_SSH_ALIAS = vagrantbox
 
 
 .PHONY: all
-all: check-health.8 check-health check-web-health.8 check-web-health check-virtualenvs.8
+all: check-health.8 check-health check-web-health.8 check-web-health check-ssl-certs check-ssl-certs.8 check-virtualenvs.8
 
 %.8: %.rst
 	rst2man $< > $@
@@ -59,6 +61,7 @@ install: check-health
 	install -D -m 644 example.conf $(DESTDIR)/usr/share/doc/pov-check-health/check-health.example
 	install -D check-health $(DESTDIR)/usr/sbin/check-health
 	install -D check-web-health $(DESTDIR)/usr/sbin/check-web-health
+	install -D check-ssl-certs $(DESTDIR)/usr/sbin/check-ssl-certs
 	install -D check-virtualenvs.sh $(DESTDIR)/usr/sbin/check-virtualenvs
 
 

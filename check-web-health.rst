@@ -86,10 +86,11 @@ If cron doesn't work, or email sending doesn't work, **check-web-health**
 won't be able to report problems.
 
 **check-web-health** is stateless and as such will keep reporting the same
-error once an hour (assuming default cron configuration) until you fix it.
+error every fifteen minutes (assuming default cron configuration) until
+you fix it.
 
 
 SEE ALSO
 ========
 
-**check-health**\ (8)
+**check-health**\ (8), **check-ssl-certs**\ (8)
