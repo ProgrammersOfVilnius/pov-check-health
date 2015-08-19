@@ -1,6 +1,7 @@
 source := $(shell dpkg-parsechangelog | awk '$$1 == "Source:" { print $$2 }')
 version := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
 date := $(shell dpkg-parsechangelog | grep ^Date: | cut -d: -f 2- | date --date="$$(cat)" +%Y-%m-%d)
+target_distribution := $(shell dpkg-parsechangelog | awk '$$1 == "Distribution:" { print $$2 }')
 
 manpages = check-health.rst check-web-health.rst check-virtualenvs.rst check-ssl-certs.rst
 
@@ -50,6 +51,14 @@ check-docs:
 	@./extract-documentation.py -c $(manpage) || echo "Run make update-docs please"
 	@echo "$(manpage): docs match comments in functions.sh"
 
+.PHONY: check-target
+check-target:
+	@test "$(target_distribution)" = "precise" || { \
+	    echo "Distribution in debian/changelog should be 'precise'" 2>&1; \
+	    echo 'Run dch -r -D precise ""' 2>&1; \
+	    exit 1; \
+	}
+
 .PHONY: update-docs
 update-docs:
 	./extract-documentation.py -u $(manpage)
@@ -79,7 +88,7 @@ source-package: clean-build-tree
 	cd pkgbuild/$(source) && debuild -S -i -k$(GPGKEY)
 
 .PHONY: upload-to-ppa release
-release upload-to-ppa: check source-package
+release upload-to-ppa: check-target check source-package
 	dput ppa:pov/ppa pkgbuild/$(source)_$(version)_source.changes
 	git tag $(version)
 	git push

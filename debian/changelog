@@ -1,4 +1,4 @@
-pov-check-health (0.9.0) UNRELEASED; urgency=medium
+pov-check-health (0.9.0) precise; urgency=medium
 
   * Fixed most shellcheck warnings.  This should've improved reliablility
     (especially if you have file or directory names with spaces in them), but
@@ -6,7 +6,7 @@ pov-check-health (0.9.0) UNRELEASED; urgency=medium
   * New checks: checkcert, checkcert_imaps, checkcert_ssmtp.
   * New script: check-ssl-certs.
 
- -- Marius Gedminas <marius@gedmin.as>  Wed, 19 Aug 2015 09:30:36 +0300
+ -- Marius Gedminas <marius@gedmin.as>  Wed, 19 Aug 2015 10:44:21 +0300
 
 pov-check-health (0.8.3) precise; urgency=medium
 
