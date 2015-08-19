@@ -27,7 +27,7 @@ check-%: check-%.sh
 
 .PHONY: test check
 test check: check-version check-docs
-	./tests.sh
+	@./tests.sh
 
 .PHONY: checkversion
 check-version:
@@ -41,10 +41,12 @@ check-version:
 	        exit 1; \
 	    }; \
 	done
+	@echo "$(manpages): dates and version numbers match debian/changelog"
 
 .PHONY: check-docs
 check-docs:
 	@./extract-documentation.py -c $(manpage) || echo "Run make update-docs please"
+	@echo "$(manpage): docs match comments in functions.sh"
 
 .PHONY: update-docs
 update-docs:

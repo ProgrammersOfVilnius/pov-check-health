@@ -90,4 +90,4 @@ j"
 
 assertEqual emit "foo" = "foo"
 
-echo "all $n_tests tests passed"
+echo "$(basename "$0"): all $n_tests tests passed"
