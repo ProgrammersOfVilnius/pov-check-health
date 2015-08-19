@@ -31,7 +31,7 @@ check-%: check-%.sh
 test check: check-version check-docs
 	@./tests.sh
 
-.PHONY: checkversion
+.PHONY: check-version
 check-version:
 	@for fn in $(manpages); do \
 	    grep -q ":Version: $(version)" $$fn || { \
