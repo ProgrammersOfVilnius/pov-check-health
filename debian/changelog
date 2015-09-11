@@ -1,3 +1,10 @@
+pov-check-health (0.9.1) UNRELEASED; urgency=medium
+
+  * check-ssl-certs: you can set CHECKCERT_WARN_BEFORE=n to change the default
+    number of days before a warning is produced.
+
+ -- Marius Gedminas <marius@gedmin.as>  Fri, 11 Sep 2015 08:24:59 +0300
+
 pov-check-health (0.9.0) precise; urgency=medium
 
   * Fixed most shellcheck warnings.  This should've improved reliablility

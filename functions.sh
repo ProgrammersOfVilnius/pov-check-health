@@ -516,7 +516,7 @@ checkweb_auth() {
 # checkcert <hostname> [<days>]
 #   Check if the SSL certificate of a website is close to expiration.
 #
-#   <days> defaults to 60.
+#   <days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 60.
 #
 #   Example: checkcert www.example.com
 #
@@ -524,7 +524,7 @@ checkweb_auth() {
 checkcert() {
     info_check checkcert "$@"
     local server="$1"
-    local days="${2:-60}"
+    local days="${2:-${CHECKCERT_WARN_BEFORE:-60}}"
     local output="$(/usr/lib/nagios/plugins/check_http -C "$days" -H "$server" --sni 2>&1)"
     case "$output" in
         OK\ *)
@@ -540,7 +540,7 @@ checkcert() {
 # checkcert_ssmtp <hostname> [<days>]
 #   Check if the SSL certificate of an SSMTP server is close to expiration.
 #
-#   <days> defaults to 60.
+#   <days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 60.
 #
 #   Example: checkcert_ssmtp mail.example.com
 #
@@ -548,7 +548,7 @@ checkcert() {
 checkcert_ssmtp() {
     info_check checkcert_ssmtp "$@"
     local server="$1"
-    local days="${2:-60}"
+    local days="${2:-${CHECKCERT_WARN_BEFORE:-60}}"
     local output="$(/usr/lib/nagios/plugins/check_ssmtp -D "$days" -H "$server" -p 465 --ssl 2>&1)"
     case "$output" in
         OK\ *)
@@ -564,7 +564,7 @@ checkcert_ssmtp() {
 # checkcert_imaps <hostname> [<days>]
 #   Check if the SSL certificate of an IMAPS server is close to expiration.
 #
-#   <days> defaults to 60.
+#   <days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 60.
 #
 #   Example: checkcert_imaps mail.example.com
 #
@@ -572,7 +572,7 @@ checkcert_ssmtp() {
 checkcert_imaps() {
     info_check checkcert_imaps "$@"
     local server="$1"
-    local days="${2:-60}"
+    local days="${2:-${CHECKCERT_WARN_BEFORE:-60}}"
     local output="$(/usr/lib/nagios/plugins/check_imap -D "$days" -H "$server" -p 993 --ssl 2>&1)"
     case "$output" in
         OK\ *)
