@@ -16,7 +16,7 @@ a shell file that is sourced from the cron script.  If this file is missing,
 
 You can generate a skeleton config file automatically with ::
 
-    check-health > /etc/pov/check-health
+    check-health -g > /etc/pov/check-health
 
 Example configuration file::
 
