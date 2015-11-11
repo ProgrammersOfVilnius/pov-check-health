@@ -1,4 +1,4 @@
-pov-check-health (0.10.0) UNRELEASED; urgency=medium
+pov-check-health (0.10.0) precise; urgency=medium
 
   * check-health, check-web-health, check-ssl-health:
     - -h now explains the meanings of the options,
@@ -7,7 +7,7 @@ pov-check-health (0.10.0) UNRELEASED; urgency=medium
       library (cmdline.sh).
   * Makefile: create generated files in build/ to avoid clutter.
 
- -- Marius Gedminas <marius@gedmin.as>  Wed, 11 Nov 2015 11:28:30 +0200
+ -- Marius Gedminas <marius@gedmin.as>  Wed, 11 Nov 2015 12:08:14 +0200
 
 pov-check-health (0.9.2) precise; urgency=medium
 
