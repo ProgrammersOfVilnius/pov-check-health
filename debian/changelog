@@ -5,6 +5,7 @@ pov-check-health (0.10.0) UNRELEASED; urgency=medium
     - new option -c to force colorization of errors,
     - refactored the shared command-line parsing code into a new helper
       library (cmdline.sh).
+  * Makefile: create generated files in build/ to avoid clutter.
 
  -- Marius Gedminas <marius@gedmin.as>  Wed, 11 Nov 2015 11:28:30 +0200
 

@@ -1,4 +1,4 @@
-check-health.8
-check-web-health.8
-check-ssl-certs.8
-check-virtualenvs.8
+build/check-health.8
+build/check-web-health.8
+build/check-ssl-certs.8
+build/check-virtualenvs.8

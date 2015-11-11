@@ -1,12 +1,19 @@
-source := $(shell dpkg-parsechangelog | awk '$$1 == "Source:" { print $$2 }')
-version := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
-date := $(shell dpkg-parsechangelog | grep ^Date: | cut -d: -f 2- | date --date="$$(cat)" +%Y-%m-%d)
+source   := $(shell dpkg-parsechangelog | awk '$$1 == "Source:" { print $$2 }')
+version  := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
+date     := $(shell dpkg-parsechangelog | grep ^Date: | cut -d: -f 2- | date --date="$$(cat)" +%Y-%m-%d)
 target_distribution := $(shell dpkg-parsechangelog | awk '$$1 == "Distribution:" { print $$2 }')
 
-manpages = check-health.rst check-web-health.rst check-virtualenvs.rst check-ssl-certs.rst
+script_sources := check-health.sh check-web-health.sh check-virtualenvs.sh check-ssl-certs.sh
+manpage_souces := $(script_sources:%.sh=%.rst)
+
+builddir       := build
+scripts        := $(script_sources:%.sh=$(builddir)/%)
+manpages       := $(manpage_souces:%.rst=$(builddir)/%.8)
 
 # the main manpage that documents all the functions
-manpage = check-health.rst
+main_manpage := check-health.rst
+
+
 
 # for testing in vagrant:
 #   vagrant box add precise64 http://files.vagrantup.com/precise64.box
@@ -15,17 +22,23 @@ manpage = check-health.rst
 #   vagrant ssh-config --host vagrantbox >> ~/.ssh/config
 # now you can 'make vagrant-test-install', then 'ssh vagrantbox' and play
 # with the package
-VAGRANT_DIR = ~/tmp/vagrantbox
-VAGRANT_SSH_ALIAS = vagrantbox
+VAGRANT_DIR := ~/tmp/vagrantbox
+VAGRANT_SSH_ALIAS := vagrantbox
 
 
 .PHONY: all
-all: check-health.8 check-health check-web-health.8 check-web-health check-ssl-certs check-ssl-certs.8 check-virtualenvs.8
+all: $(scripts) $(manpages)
 
-%.8: %.rst
-	rst2man $< > $@
+clean:
+	rm -f $(scripts) $(manpages)
 
-check-%: check-%.sh
+$(builddir):
+	mkdir $@
+
+$(builddir)/%.8: %.rst | $(builddir)
+	rst2man $< $@
+
+$(builddir)/check-%: check-%.sh | $(builddir)
 	sed -e 's,^libdir=\.$$,libdir=/usr/share/pov-check-health,' $< > $@
 
 .PHONY: test check
@@ -34,7 +47,7 @@ test check: check-version check-docs
 
 .PHONY: check-version
 check-version:
-	@for fn in $(manpages); do \
+	@for fn in $(manpage_souces); do \
 	    grep -q ":Version: $(version)" $$fn || { \
 	        echo "Version number in $$fn doesn't match debian/changelog ($(version))" 2>&1; \
 	        exit 1; \
@@ -43,13 +56,13 @@ check-version:
 	        echo "Date in $$fn doesn't match debian/changelog ($(date))" 2>&1; \
 	        exit 1; \
 	    }; \
+	    echo "$$fn: date and version number match debian/changelog"; \
 	done
-	@echo "$(manpages): dates and version numbers match debian/changelog"
 
 .PHONY: check-docs
 check-docs:
-	@./extract-documentation.py -c $(manpage) || echo "Run make update-docs please"
-	@echo "$(manpage): docs match comments in functions.sh"
+	@./extract-documentation.py -c $(main_manpage) || echo "Run make update-docs please"
+	@echo "$(main_manpage): docs match comments in functions.sh"
 
 .PHONY: check-target
 check-target:
@@ -61,25 +74,26 @@ check-target:
 
 .PHONY: update-docs
 update-docs:
-	./extract-documentation.py -u $(manpage)
+	./extract-documentation.py -u $(main_manpage)
 
 .PHONY: install
 install: check-health
 	install -D -m 644 functions.sh $(DESTDIR)/usr/share/pov-check-health/functions.sh
-	install -D -m 644 generate.sh $(DESTDIR)/usr/share/pov-check-health/generate.sh
-	install -D -m 644 cmdline.sh $(DESTDIR)/usr/share/pov-check-health/cmdline.sh
+	install -D -m 644 generate.sh  $(DESTDIR)/usr/share/pov-check-health/generate.sh
+	install -D -m 644 cmdline.sh   $(DESTDIR)/usr/share/pov-check-health/cmdline.sh
 	install -D -m 644 example.conf $(DESTDIR)/usr/share/doc/pov-check-health/check-health.example
-	install -D check-health $(DESTDIR)/usr/sbin/check-health
-	install -D check-web-health $(DESTDIR)/usr/sbin/check-web-health
-	install -D check-ssl-certs $(DESTDIR)/usr/sbin/check-ssl-certs
-	install -D check-virtualenvs.sh $(DESTDIR)/usr/sbin/check-virtualenvs
+	install -D $(builddir)/check-health      $(DESTDIR)/usr/sbin/check-health
+	install -D $(builddir)/check-web-health  $(DESTDIR)/usr/sbin/check-web-health
+	install -D $(builddir)/check-ssl-certs   $(DESTDIR)/usr/sbin/check-ssl-certs
+	install -D $(builddir)/check-virtualenvs $(DESTDIR)/usr/sbin/check-virtualenvs
+	# manpages are installed by debhelpers; see debian/manpages
 
 
-VCS_STATUS = git status --porcelain
+VCS_STATUS := git status --porcelain
 
 .PHONY: clean-build-tree
 clean-build-tree:
-	@./extract-documentation.py -c $(manpage) || { echo "Run make update-docs please" 1>&2; exit 1; }
+	@./extract-documentation.py -c $(main_manpage) || { echo "Run make update-docs please" 1>&2; exit 1; }
 	@test -z "`$(VCS_STATUS) 2>&1`" || { echo; echo "Your working tree is not clean; please commit and try again" 1>&2; $(VCS_STATUS); exit 1; }
 	rm -rf pkgbuild/$(source)
 	git archive --format=tar --prefix=pkgbuild/$(source)/ HEAD | tar -xf -

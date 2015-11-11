@@ -2,11 +2,5 @@ debian/files
 debian/pov-check-health.debhelper.log
 debian/pov-check-health.substvars
 debian/pov-check-health/
-check-health.8
-check-health
-pkgbuild
-check-virtualenvs.8
-check-web-health
-check-web-health.8
-check-ssl-certs
-check-ssl-certs.8
+build/
+pkgbuild/
