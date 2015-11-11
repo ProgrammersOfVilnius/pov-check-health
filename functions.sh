@@ -10,6 +10,8 @@ purple=
 red=
 reset=
 line_up=
+w_red=
+w_reset=
 if [ -t 1 ] && [ "$(tput colors)" -ge 8 ]; then
     purple='\033[35m'
     red='\033[31m'
@@ -21,23 +23,35 @@ fi
 if [ -z "$verbose" ]; then
     verbose=0
 fi
+if [ -z "$color" ]; then
+    color=0
+fi
+if [ "$color" -ne 0 ]; then
+    w_red='\033[31m'
+    w_reset='\033[0m'
+fi
 
+# warn about a failed check
 warn() {
-    printf "%s\n" "$*" 1>&2
+    printf "${w_red}%s${w_reset}\n" "$*" 1>&2
 }
 
+# inform about some possibly interesting condition (in verbose mode)
 info() {
     if [ $verbose -gt 0 ]; then
         printf "%s\n" "$*"
     fi
 }
 
+# inform about a check to be run (in verbose mode)
 info_check() {
     if [ $verbose -gt 0 ]; then
         printf "${purple}+ %s${reset}\n" "$*"
     fi
 }
 
+# inform about a check that failed (when the failure message itself is
+# insufficient)
 warn_check() {
     if [ $verbose -eq 0 ]; then
         printf "${red}+ %s${reset}\n" "$*" 1>&2

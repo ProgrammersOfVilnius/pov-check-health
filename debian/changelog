@@ -1,3 +1,11 @@
+pov-check-health (0.10.0) UNRELEASED; urgency=medium
+
+  * check-health:
+    - -h now explains the meanings of the options.
+    - new option -c to force colorization of errors.
+
+ -- Marius Gedminas <marius@gedmin.as>  Wed, 11 Nov 2015 11:28:30 +0200
+
 pov-check-health (0.9.2) precise; urgency=medium
 
   * checkram: include buffers/cache in free memory calculation (GH #13).

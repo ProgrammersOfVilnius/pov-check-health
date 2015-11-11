@@ -3,23 +3,36 @@
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 export PATH
 
-usage="Usage: check-health [-v] [-f configfile]
-       check-health -g > configfile
-       check-health -h"
-
 verbose=0
+color=0
 generate=0
 configfile=/etc/pov/check-health
 
+usage="Usage: check-health [-c] [-v] [-f configfile]
+       check-health -g > configfile
+       check-health -h"
+help="
+Options:
+  -c           colorize the output
+  -v           be more verbose (show checks being executed)
+  -f FILENAME  use a different config file (default: $configfile)
+  -g           generate a config file and print to standard output
+  -h           show this help message
+"
+
 libdir=.
 
-while getopts hvgf: OPT; do
+while getopts hvcgf: OPT; do
     case "$OPT" in
+        c)
+            color=1
+            ;;
         v)
             verbose=1
             ;;
         h)
             echo "$usage"
+            echo "$help"
             exit 0
             ;;
         g)
