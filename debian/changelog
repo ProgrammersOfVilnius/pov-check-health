@@ -1,8 +1,10 @@
 pov-check-health (0.10.0) UNRELEASED; urgency=medium
 
-  * check-health:
-    - -h now explains the meanings of the options.
-    - new option -c to force colorization of errors.
+  * check-health, check-web-health, check-ssl-health:
+    - -h now explains the meanings of the options,
+    - new option -c to force colorization of errors,
+    - refactored the shared command-line parsing code into a new helper
+      library (cmdline.sh).
 
  -- Marius Gedminas <marius@gedmin.as>  Wed, 11 Nov 2015 11:28:30 +0200
 

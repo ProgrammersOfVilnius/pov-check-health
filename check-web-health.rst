@@ -7,15 +7,15 @@ check website health
 --------------------
 
 :Author: Marius Gedminas <marius@gedmin.as>
-:Date: 2015-11-04
-:Version: 0.9.2
+:Date: 2015-11-11
+:Version: 0.10.0
 :Manual section: 8
 
 
 SYNOPSIS
 ========
 
-**check-web-health** [**-v**] [**-f** *configfile*]
+**check-web-health** [**-c**] [**-v**] [**-f** *configfile*]
 
 **check-web-health** **-g** > *configfile*
 
@@ -43,8 +43,16 @@ OPTIONS
 
 -h           Print brief usage message and exit.
 -v           Verbose output: show what checks are being performed.
+-c           Colorize error messages in red.
 -g           Generate a sample config file and print it to stdout.
 -f FILENAME  Use the specified config file instead of ``/etc/pov/check-web-health``.
+
+
+Note: ``-v`` also uses some colors, for informational messages, when
+standard output is a terminal that supports colors.  ``-c``, on the other
+hand, is unconditional and always uses colors, which is useful when
+you run **check-web-health** over ssh without an allocated terminal and
+want to see the errors stand out.
 
 
 CONFIGURATION FILE
