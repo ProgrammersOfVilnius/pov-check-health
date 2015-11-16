@@ -158,6 +158,7 @@ checkinodes() {
     info_check checkinodes "$@"
     need=${2:-5000}
     free=$(df -P -i "$1" | awk 'NR==2 { print $4; }')
+    [ -z "$free" ] && { warn "couldn't figure out free inodes in $1"; return; }
     [ "$free" -lt "$need" ] && warn "$1 is low on inodes ($free)"
 }
 
