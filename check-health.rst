@@ -398,7 +398,8 @@ DESIGN LIMITATIONS
 ==================
 
 If cron doesn't work, or email sending doesn't work, **check-health**
-won't be able to report problems.
+won't be able to report problems.  You can combine it with a service like
+https://healthchecks.io to catch these kinds of problems.
 
 **check-health** is stateless and as such will keep reporting the same
 error once an hour (assuming default cron configuration) until you fix it.
