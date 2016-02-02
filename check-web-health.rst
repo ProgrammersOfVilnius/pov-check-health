@@ -62,7 +62,101 @@ CONFIGURATION FILE
 ``checkweb`` function, which is a very thin wrapper around ``check_http``
 from Nagios plugins.  See
 https://www.monitoring-plugins.org/doc/man/check_http.html for the
-available options.
+available options.  Here are a few of the most useful ones:
+
+HTTP request parameters
+
+-H ADDRESS, --hostname=ADDRESS
+   Host name argument for servers using host headers (virtual host)
+   Append a port to include it in the header (eg: example.com:5000)
+
+-I ADDRESS, --IP-address=ADDRESS
+   IP address or name (use numeric address if possible to bypass DNS lookup).
+
+-p PORT, --port=PORT
+   Port number (default: 80)
+
+-4, --use-ipv4
+   Use IPv4 connection
+
+-6, --use-ipv6
+   Use IPv6 connection
+
+-S, --ssl
+   Connect via SSL. Port defaults to 443.
+
+--sni
+   Enable SSL/TLS hostname extension support (SNI)
+
+-u PATH, --url=PATH
+   URL to GET or POST (default: /)
+
+-j METHOD, --method=METHOD
+   Set HTTP method (for example: HEAD, OPTIONS, TRACE, PUT, DELETE, CONNECT)
+
+-P DATa, --post=DATA
+   URL encoded http POST data
+
+-T TYPE, --content-type=TYPE
+   specify Content-Type header media type when POSTing
+
+-A AGENT, --useragent=AGENT
+   String to be sent in http header as "User Agent"
+
+-k HEADER, --header=HEADER
+   Any other tags to be sent in http header. Use multiple times for additional headers
+
+HTTP response checks
+
+-e STRING, --expect=STRING
+   Comma-delimited list of strings, at least one of them is expected in
+   the first (status) line of the server response (default: HTTP/1.)
+   If specified skips all other status line logic (ex: 3xx, 4xx, 5xx processing)
+
+-d STRING, --header-string=STRING
+   String to expect in the response headers
+
+-s STRING, --string=STRING
+   String to expect in the content
+
+-l, --linespan
+   Allow regex to span newlines (must precede -r or -R)
+
+-r STRING, --regex=STRING, --ereg=STRING
+   Search page for regex STRING
+
+-R STRING, --eregi=STRING
+   Search page for case-insensitive regex STRING
+
+--invert-regex
+   Return CRITICAL if found, OK if not
+
+-M SECONDS, --max-age=SECONDS
+   Warn if document is more than SECONDS old. the number can also be of
+   the form "10m" for minutes, "10h" for hours, or "10d" for days.
+
+-m SIZE_RANGE, --pagesize=SIZE_RANGE
+   Minimum page size required (bytes) : Maximum page size required (bytes)
+
+Time options
+
+-w SECONDS, --warning=SECONDS
+   Response time to result in warning status (seconds)
+
+-c SECONDS, --critical=SECONDS
+   Response time to result in critical status (seconds)
+
+-t SECONDS, --timeout=SECONDS
+   Seconds before connection times out (default: 10.0)
+
+Options you should not use
+
+-a AUTH_PAIR, --authorization=AUTH_PAIR
+   Use ``checkweb_auth <username>:<password> <options>`` instead
+
+-C DAYS, --certificate=DAYS
+   Use ``checkcert <hostname> [<days>]`` instead
+
 
 Technically you may also use any of the other checks from **check-health**\ (8),
 but why would you want to do that?  Except maybe `checkuptime`, to suppress the other
