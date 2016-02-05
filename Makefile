@@ -3,12 +3,12 @@ version  := $(shell dpkg-parsechangelog | awk '$$1 == "Version:" { print $$2 }')
 date     := $(shell dpkg-parsechangelog | grep ^Date: | cut -d: -f 2- | date --date="$$(cat)" +%Y-%m-%d)
 target_distribution := $(shell dpkg-parsechangelog | awk '$$1 == "Distribution:" { print $$2 }')
 
-script_sources := check-health.sh check-web-health.sh check-virtualenvs.sh check-ssl-certs.sh
-manpage_souces := $(script_sources:%.sh=%.rst)
+script_sources  := check-health.sh check-web-health.sh check-virtualenvs.sh check-ssl-certs.sh
+manpage_sources := $(script_sources:%.sh=%.rst)
 
-builddir       := build
-scripts        := $(script_sources:%.sh=$(builddir)/%)
-manpages       := $(manpage_souces:%.rst=$(builddir)/%.8)
+builddir        := build
+scripts         := $(script_sources:%.sh=$(builddir)/%)
+manpages        := $(manpage_sources:%.rst=$(builddir)/%.8)
 
 # the main manpage that documents all the functions
 main_manpage := check-health.rst
@@ -47,17 +47,24 @@ test check: check-version check-docs
 
 .PHONY: check-version
 check-version:
-	@for fn in $(manpage_souces); do \
+	@for fn in $(manpage_sources); do \
 	    grep -q ":Version: $(version)" $$fn || { \
-	        echo "Version number in $$fn doesn't match debian/changelog ($(version))" 2>&1; \
+	        echo "Version number in $$fn doesn't match debian/changelog ($(version))." 2>&1; \
+	        echo "Run make update-version" 2>&1; \
 	        exit 1; \
 	    }; \
 	    grep -q ":Date: $(date)" $$fn || { \
 	        echo "Date in $$fn doesn't match debian/changelog ($(date))" 2>&1; \
+	        echo "Run make update-version" 2>&1; \
 	        exit 1; \
 	    }; \
 	    echo "$$fn: date and version number match debian/changelog"; \
 	done
+
+.PHONY: update-version
+update-version:
+	sed -i -e 's/^:Version: .*/:Version: $(version)/' $(manpage_sources)
+	sed -i -e 's/^:Date: .*/:Date: $(date)/' $(manpage_sources)
 
 .PHONY: check-docs
 check-docs:
@@ -94,7 +101,12 @@ VCS_STATUS := git status --porcelain
 .PHONY: clean-build-tree
 clean-build-tree:
 	@./extract-documentation.py -c $(main_manpage) || { echo "Run make update-docs please" 1>&2; exit 1; }
-	@test -z "`$(VCS_STATUS) 2>&1`" || { echo; echo "Your working tree is not clean; please commit and try again" 1>&2; $(VCS_STATUS); exit 1; }
+	@test -z "`$(VCS_STATUS) 2>&1`" || { \
+	    echo; \
+	    echo "Your working tree is not clean; please commit and try again" 1>&2; \
+	    $(VCS_STATUS); \
+	    echo 'E.g. run git commit -am "Release $(version)"' 1>&2; \
+	    exit 1; }
 	rm -rf pkgbuild/$(source)
 	git archive --format=tar --prefix=pkgbuild/$(source)/ HEAD | tar -xf -
 

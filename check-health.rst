@@ -7,8 +7,8 @@ check system health
 -------------------
 
 :Author: Marius Gedminas <marius@gedmin.as>
-:Date: 2015-11-11
-:Version: 0.10.0
+:Date: 2016-02-05
+:Version: 0.10.1
 :Manual section: 8
 
 
@@ -312,7 +312,7 @@ checkweb_auth
 checkcert <hostname> [<days>]
   Check if the SSL certificate of a website is close to expiration.
 
-  <days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 60.
+  <days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 30.
 
 
   Example: ``checkcert www.example.com``
@@ -323,7 +323,7 @@ checkcert <hostname> [<days>]
 checkcert_ssmtp <hostname> [<days>]
   Check if the SSL certificate of an SSMTP server is close to expiration.
 
-  <days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 60.
+  <days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 30.
 
 
   Example: ``checkcert_ssmtp mail.example.com``
@@ -334,7 +334,7 @@ checkcert_ssmtp <hostname> [<days>]
 checkcert_imaps <hostname> [<days>]
   Check if the SSL certificate of an IMAPS server is close to expiration.
 
-  <days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 60.
+  <days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 30.
 
 
   Example: ``checkcert_imaps mail.example.com``

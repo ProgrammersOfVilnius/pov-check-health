@@ -1,9 +1,9 @@
-pov-check-health (0.10.1) UNRELEASED; urgency=medium
+pov-check-health (0.10.1) precise; urgency=medium
 
   * checkinodes: handle non-existent filesystems (GH #14).
   * checkcert et al: reduce the default number of days before a warning to 30.
 
- -- Marius Gedminas <marius@gedmin.as>  Mon, 16 Nov 2015 09:19:53 +0200
+ -- Marius Gedminas <marius@gedmin.as>  Fri, 05 Feb 2016 16:08:01 +0200
 
 pov-check-health (0.10.0) precise; urgency=medium
 
