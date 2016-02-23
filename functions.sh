@@ -214,6 +214,11 @@ checkpidfiles() {
                 # suppress spurious warning when this glob doesn't match anything
                 info "ignoring $pidfile since glob failed to match"
                 ;;
+            /var/run/samba/samba.pid)
+                # https://bugs.launchpad.net/ubuntu/+source/samba/+bug/1546418
+                # ignore: this one is always stale, yet nothing bad happens
+                info "ignoring $pidfile since it's always stale"
+                ;;
             /var/run/sm-notify.pid)
                 # ignore: this one is always stale, yet nothing bad happens
                 info "ignoring $pidfile since it's always stale"
