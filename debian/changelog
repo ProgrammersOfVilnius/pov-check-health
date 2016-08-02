@@ -1,10 +1,10 @@
-pov-check-health (0.10.2) UNRELEASED; urgency=medium
+pov-check-health (0.10.2) precise; urgency=medium
 
   * checkpidfiles: ignore /var/run/samba/samba.pid because of
     https://bugs.launchpad.net/ubuntu/+source/samba/+bug/1546418.
   * checkcert: support non-standard ports.
 
- -- Marius Gedminas <marius@gedmin.as>  Tue, 02 Aug 2016 08:51:35 +0300
+ -- Marius Gedminas <marius@gedmin.as>  Tue, 02 Aug 2016 08:52:49 +0300
 
 pov-check-health (0.10.1) precise; urgency=medium
 

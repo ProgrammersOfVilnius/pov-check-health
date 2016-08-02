@@ -7,8 +7,8 @@ check SSL certificates
 ----------------------
 
 :Author: Marius Gedminas <marius@gedmin.as>
-:Date: 2016-02-05
-:Version: 0.10.1
+:Date: 2016-08-02
+:Version: 0.10.2
 :Manual section: 8
 
 
