@@ -533,19 +533,30 @@ checkweb_auth() {
     esac
 }
 
-# checkcert <hostname> [<days>]
+# checkcert <hostname>[:<port>] [<days>]
 #   Check if the SSL certificate of a website is close to expiration.
 #
 #   <days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 30.
 #
 #   Example: checkcert www.example.com
+#   Example: checkcert www.example.com:8443
 #
 #   This function is normally used from /etc/pov/check-ssl-certs.
 checkcert() {
     info_check checkcert "$@"
     local server="$1"
     local days="${2:-${CHECKCERT_WARN_BEFORE:-30}}"
-    local output="$(/usr/lib/nagios/plugins/check_http -C "$days" -H "$server" --sni 2>&1)"
+    local output
+    case "$server" in
+        *:*)
+            host="${server%:*}"
+            port="${server##*:}"
+            output="$(/usr/lib/nagios/plugins/check_http -C "$days" -H "$host" -p "$port" --sni 2>&1)"
+            ;;
+        *)
+            output="$(/usr/lib/nagios/plugins/check_http -C "$days" -H "$server" --sni 2>&1)"
+            ;;
+    esac
     case "$output" in
         OK\ *)
             info "$output"
