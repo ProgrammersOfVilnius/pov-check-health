@@ -327,7 +327,7 @@ checktoomanyproc_pgrep_full() {
 checkram() {
     info_check checkram "$@"
     need=$(_to_mb "$1" 100)
-    free=$(free -mo | awk '$1 ~ /^Mem/ { free += $4 + $6 + $7} $1 ~ /^Swap/ { free += $4 } END { print free }')
+    free=$(free -m | awk '$1 ~ /^Mem/ { free += $4 + $6 + $7} $1 ~ /^Swap/ { free += $4 } END { print free }')
     [ "$free" -lt "$need" ] && warn "low on virtual memory ($free)"
 }
 
