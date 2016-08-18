@@ -1,3 +1,11 @@
+pov-check-health (0.10.4) precise; urgency=medium
+
+  * check-health -g:
+    - sort process names using locale-independent collation order,
+    - emit correct checks for systemd-journal and systemd-timesyn.
+
+ -- Marius Gedminas <marius@gedmin.as>  Thu, 18 Aug 2016 15:37:20 +0300
+
 pov-check-health (0.10.3) precise; urgency=medium
 
   * checkram: make it work on Ubuntu 16.04 LTS (GH #18).

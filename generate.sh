@@ -69,7 +69,7 @@ generate_checkpidfiles() {
 
 generate_checkproc() {
     prefix "# Check that processes are running"
-    ps --ppid 1 -o comm= | sort -u | while read cmd; do
+    ps --ppid 1 -o comm= | LC_ALL=C sort -u | while read cmd; do
         case $cmd in
             kthreadd/*)
                 ;;
@@ -100,6 +100,10 @@ generate_checkproc() {
                 # this is horrible, but neither checkproc nor checkproc_pgrep
                 # postgrey work
                 emit checkproc_pgrep_full '^/usr/sbin/postgrey'
+                ;;
+            systemd-journal|systemd-timesyn)
+                # for some reason pidof systemd-journal fails
+                emit checkproc_pgrep "$cmd"
                 ;;
             *)
                 emit checkproc "$cmd"
