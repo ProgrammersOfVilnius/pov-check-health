@@ -1,8 +1,8 @@
-pov-check-health (0.11.0) UNRELEASED; urgency=medium
+pov-check-health (0.11.0) precise; urgency=medium
 
   * checkcert et al: reduce the default number of days before a warning to 21.
 
- -- Marius Gedminas <marius@gedmin.as>  Fri, 30 Sep 2016 10:19:50 +0300
+ -- Marius Gedminas <marius@gedmin.as>  Thu, 13 Oct 2016 09:52:21 +0300
 
 pov-check-health (0.10.5) precise; urgency=medium
 
