@@ -34,6 +34,7 @@ fi
 # warn about a failed check
 warn() {
     printf "${w_red}%s${w_reset}\n" "$*" 1>&2
+    return 1
 }
 
 # inform about some possibly interesting condition (in verbose mode)
@@ -143,8 +144,8 @@ checkfs() {
     info_check checkfs "$@"
     need=$(_to_kb "$2" 1000)
     free=$(df -P -k "$1" | awk 'NR==2 { print $4; }')
-    [ -z "$free" ] && { warn "couldn't figure out free space in $1"; return; }
-    [ "$free" -lt "$need" ] && warn "$1 is low on disk space ($free)"
+    [ -z "$free" ] && { warn "couldn't figure out free space in $1"; return 1; }
+    [ "$free" -ge "$need" ] || warn "$1 is low on disk space ($free)"
 }
 
 # checkinodes <mountpoint> [<inodes>]
@@ -158,8 +159,8 @@ checkinodes() {
     info_check checkinodes "$@"
     need=${2:-5000}
     free=$(df -P -i "$1" | awk 'NR==2 { print $4; }')
-    [ -z "$free" ] && { warn "couldn't figure out free inodes in $1"; return; }
-    [ "$free" -lt "$need" ] && warn "$1 is low on inodes ($free)"
+    [ -z "$free" ] && { warn "couldn't figure out free inodes in $1"; return 1; }
+    [ "$free" -ge "$need" ] || warn "$1 is low on inodes ($free)"
 }
 
 # checknfs <mountpoint>
@@ -192,10 +193,12 @@ checknfs() {
 #   Example: checkpidfile /var/run/crond.pid
 checkpidfile() {
     info_check checkpidfile "$@"
-    [ -f "$1" ] || { warn "$1: pidfile missing"; return; }
+    [ -f "$1" ] || { warn "$1: pidfile missing"; return 1; }
+    local rc=0
     for pid in $(cat "$1"); do
-        test -d "/proc/$pid" || warn "$1: stale pidfile ($pid)"
+        test -d "/proc/$pid" || { warn "$1: stale pidfile ($pid)"; rc=1; }
     done
+    return $rc
 }
 
 # checkpidfiles <filename> ...
@@ -208,6 +211,7 @@ checkpidfile() {
 #
 #   Example: checkpidfiles /var/run/*.pid /var/run/*/*.pid
 checkpidfiles() {
+    local rc=0
     for pidfile in "$@"; do
         case $pidfile in
             "/run/*.pid"|"/var/run/*.pid"|"/run/*/*.pid"|"/var/run/*/*.pid")
@@ -224,10 +228,11 @@ checkpidfiles() {
                 info "ignoring $pidfile since it's always stale"
                 ;;
             *)
-                checkpidfile "$pidfile"
+                checkpidfile "$pidfile" || rc=1
                 ;;
         esac
     done
+    return $rc
 }
 
 # checkproc <name>
@@ -238,7 +243,7 @@ checkpidfiles() {
 #   Example: checkproc crond
 checkproc() {
     info_check checkproc "$@"
-    [ -z "$(pidof -s -x "$1")" ] && warn "$1 is not running"
+    [ -n "$(pidof -s -x "$1")" ] || warn "$1 is not running"
 }
 
 # checkproc_pgrep <name>
@@ -249,7 +254,7 @@ checkproc() {
 #   Example: checkproc_pgrep tracd
 checkproc_pgrep() {
     info_check checkproc_pgrep "$@"
-    [ -z "$(pgrep "$1")" ] && warn "$1 is not running"
+    [ -n "$(pgrep "$1")" ] || warn "$1 is not running"
 }
 
 # checkproc_pgrep_full <cmdline>
@@ -261,7 +266,7 @@ checkproc_pgrep() {
 #   Example: checkproc_pgrep_full '/usr/bin/java -jar /usr/share/jenkins/jenkins.war'
 checkproc_pgrep_full() {
     info_check checkproc_pgrep_full "$@"
-    [ -z "$(pgrep -f "$@")" ] && warn "$1 is not running"
+    [ -n "$(pgrep -f "$@")" ] || warn "$1 is not running"
 }
 
 # checktoomanyproc <name> <limit>
@@ -273,7 +278,7 @@ checkproc_pgrep_full() {
 checktoomanyproc() {
     info_check checktoomanyproc "$@"
     n=$(pidof -x "$1"|wc -w)
-    [ "$n" -ge "$2" ] && warn "More than $(($2-1)) copies ($n) of $1 running"
+    [ "$n" -lt "$2" ] || warn "More than $(($2-1)) copies ($n) of $1 running"
 }
 
 # checktoomanyproc_pgrep <name> <limit>
@@ -288,11 +293,11 @@ checktoomanyproc_pgrep() {
     case "$out" in
         Usage:*)
             warn "pgrep $1 failed: $out"
-            return
+            return 1
             ;;
     esac
     n=$(echo "$out"|wc -w)
-    [ "$n" -ge "$2" ] && warn "More than $(($2-1)) copies ($n) of $1 running"
+    [ "$n" -lt "$2" ] || warn "More than $(($2-1)) copies ($n) of $1 running"
 }
 
 # checktoomanyproc_pgrep_full <limit> <cmdline>
@@ -310,11 +315,11 @@ checktoomanyproc_pgrep_full() {
     case "$out" in
         Usage:*)
             warn "pgrep -f $* failed: $out"
-            return
+            return 1
             ;;
     esac
     n=$(echo "$out"|wc -w)
-    [ "$n" -ge "$limit" ] && warn "More than $((limit-1)) copies ($n) of $* running"
+    [ "$n" -lt "$limit" ] || warn "More than $((limit-1)) copies ($n) of $* running"
 }
 
 # checkram [<free>[M/G/T]]
@@ -328,7 +333,7 @@ checkram() {
     info_check checkram "$@"
     need=$(_to_mb "$1" 100)
     free=$(awk '$1 ~ /^(MemFree|Buffers|Cached|SwapFree):/ { free += $2 / 1024 } END { printf "%d", free }' /proc/meminfo)
-    [ "$free" -lt "$need" ] && warn "low on virtual memory ($free)"
+    [ "$free" -ge "$need" ] || warn "low on virtual memory ($free)"
 }
 
 # checkswap [<limit>[M/G/T]]
@@ -341,7 +346,7 @@ checkswap() {
     info_check checkswap "$@"
     trip=$(_to_mb "$1" 100)
     used=$(free -m| awk '/^Swap/ {print $3}')
-    [ "$used" -gt "$trip" ] && warn "too much swap used (${used}M)"
+    [ "$used" -le "$trip" ] || warn "too much swap used (${used}M)"
 }
 
 # checkmailq [<limit>]
@@ -378,7 +383,7 @@ checkmailq() {
             return
             ;;
     esac
-    [ "$count" -gt "$limit" ] && warn "mail queue is large ($count requests)"
+    [ "$count" -le "$limit" ] || warn "mail queue is large ($count requests)"
 }
 
 # checkzopemailq <path> ...
@@ -412,7 +417,9 @@ checkcups() {
     lpq "$queuename" | grep -s -q "^$queuename is not ready$" && {
         warn "printer $1 is not ready, trying to enable"
         cupsenable "$1"
+        return 1
     }
+    return 0
 }
 
 # cmpfiles <pathname1> <pathname2>
@@ -446,7 +453,9 @@ checkaliases() {
     info_check checkaliases "$@"
     [ /etc/aliases.db -ot /etc/aliases ] && {
         warn "/etc/aliases.db out of date; run newaliases"
+        return 1
     }
+    return 0
 }
 
 # checklilo
@@ -459,7 +468,11 @@ checkaliases() {
 #   Example: checklilo
 checklilo() {
     info_check checklilo "$@"
-    [ /boot/map -ot /vmlinuz ] && warn "lilo not updated after kernel upgrade"
+    [ /boot/map -ot /vmlinuz ] && {
+        warn "lilo not updated after kernel upgrade"
+        return 1
+    }
+    return 0
 }
 
 # checkweb

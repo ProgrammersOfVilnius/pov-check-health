@@ -27,6 +27,9 @@ Example configuration file::
     checkproc_pgrep tracd
     checkproc_pgrep_full '/usr/bin/java -jar /usr/share/jenkins/jenkins.war'
 
+    # Check for daemons with known bugs and restart them automatically
+    checkproc atop || service atop restart
+
     # Check for stale aspell processes (more than 2)
     checktoomanyproc aspell 2
 
