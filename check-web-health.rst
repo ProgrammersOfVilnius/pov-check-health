@@ -94,14 +94,14 @@ HTTP request parameters
 -j METHOD, --method=METHOD
    Set HTTP method (for example: HEAD, OPTIONS, TRACE, PUT, DELETE, CONNECT)
 
--P DATa, --post=DATA
-   URL encoded http POST data
+-P DATA, --post=DATA
+   URL-encoded HTTP POST data
 
 -T TYPE, --content-type=TYPE
-   specify Content-Type header media type when POSTing
+   Specify Content-Type header media type when POSTing
 
 -A AGENT, --useragent=AGENT
-   String to be sent in http header as "User Agent"
+   String to be sent in HTTP header as "User Agent"
 
 -k HEADER, --header=HEADER
    Any other tags to be sent in http header. Use multiple times for additional headers
