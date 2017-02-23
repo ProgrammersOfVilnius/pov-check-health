@@ -61,6 +61,17 @@ CONFIGURATION FILE
 ``/etc/pov/check-ssl-certs`` is a shell script that can invoke the
 ``checkcert``, ``checkcert_ssmtp`` and ``checkcert_imaps`` functions.
 
+checkcert <hostname>[:<port>] [<days>]
+  Check if the SSL certificate of a website is close to expiration.
+
+checkcert_ssmtp <hostname> [<days>]
+  Check if the SSL certificate of an SSMTP server is close to expiration.
+
+checkcert_imaps <hostname> [<days>]
+  Check if the SSL certificate of an IMAPS server is close to expiration.
+
+<days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 21.
+
 Technically you may also use any of the other checks from **check-health**\ (8),
 but why would you want to do that?
 
