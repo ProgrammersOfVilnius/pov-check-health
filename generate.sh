@@ -101,6 +101,10 @@ generate_checkproc() {
                 # postgrey work
                 emit checkproc_pgrep_full '^/usr/sbin/postgrey'
                 ;;
+            systemd)
+                # skip: this is systemd --user, which exists only when there
+                # are live login (e.g. ssh) sessions
+                ;;
             systemd-journal|systemd-timesyn)
                 # for some reason pidof systemd-journal fails
                 emit checkproc_pgrep "$cmd"

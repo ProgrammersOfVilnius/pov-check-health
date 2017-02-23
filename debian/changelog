@@ -1,3 +1,14 @@
+pov-check-health (0.12.1) UNRELEASED; urgency=medium
+
+  * check-health -g:
+    - skip 'systemd --user' which exists only when there are login sessions.
+  * check-ssl-certs(8):
+    - mention the synopses of checssl* functions.
+  * check-web-health(8):
+    - minor wording and capitalization fixes.
+
+ -- Marius Gedminas <marius@gedmin.as>  Thu, 23 Feb 2017 20:42:37 +0200
+
 pov-check-health (0.12.0) precise; urgency=medium
 
   * all checkers return a status code in addition to emitting a warning
