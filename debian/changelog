@@ -1,4 +1,4 @@
-pov-check-health (0.12.1) UNRELEASED; urgency=medium
+pov-check-health (0.12.1) trusty; urgency=medium
 
   * check-health -g:
     - skip 'systemd --user' which exists only when there are login sessions.
@@ -7,7 +7,7 @@ pov-check-health (0.12.1) UNRELEASED; urgency=medium
   * check-web-health(8):
     - minor wording and capitalization fixes.
 
- -- Marius Gedminas <marius@gedmin.as>  Thu, 23 Feb 2017 20:42:37 +0200
+ -- Marius Gedminas <marius@gedmin.as>  Wed, 06 Dec 2017 17:16:33 +0200
 
 pov-check-health (0.12.0) precise; urgency=medium
 
