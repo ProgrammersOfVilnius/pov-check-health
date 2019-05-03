@@ -24,7 +24,7 @@ emit() {
         printf "%s" "$pending"
         pending=
     fi
-    printf "%s\n" "$*"
+    printf "%s\\n" "$*"
 }
 
 separator() {
@@ -34,7 +34,7 @@ separator() {
 
 generate_checkfs() {
     prefix "# Check free disk space"
-    df -PT | { read header; while read device fstype size used free capacity mountpoint; do
+    df -PT | { read -r header; while read -r device fstype size used free capacity mountpoint; do
         case $fstype in
             tmpfs|devtmpfs|ecryptfs|nfs|vboxsf)
                 ;;
@@ -52,7 +52,8 @@ generate_checkfs() {
 
 generate_checkinodes() {
     prefix "# Check free inodes"
-    df -PT | { read header; while read device fstype size used free capacity mountpoint; do
+    # shellcheck disable=SC2034
+    df -PT | { read -r header; while read -r device fstype size used free capacity mountpoint; do
         case $fstype in
             tmpfs|devtmpfs|ecryptfs|nfs|nfs4|cifs|vboxsf)
                 ;;
@@ -71,7 +72,7 @@ generate_checkpidfiles() {
 
 generate_checkproc() {
     prefix "# Check that processes are running"
-    ps --ppid 1 -o comm= | LC_ALL=C sort -u | while read cmd; do
+    ps --ppid 1 -o comm= | LC_ALL=C sort -u | while read -r cmd; do
         case $cmd in
             kthreadd/*)
                 ;;
