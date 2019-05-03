@@ -302,6 +302,16 @@ checkaliases
   Example: ``checkaliases``
 
 
+check_postmap_up_to_date <pathname>
+  Check if <pathname>.db is up to date with respect to <pathname>.
+
+  Background: when you edit /etc/postfix/* it's so easy to forget to run
+  postmap.
+
+
+  Example: ``check_postmap_up_to_date /etc/postfix/virtual``
+
+
 checklilo
   Check if LILO was run after a kernel update.
 

@@ -10,6 +10,7 @@ pov-check-health (0.13.0) UNRELEASED; urgency=medium
     - check_no_matching_lines (GH #5),
     - checkthreads (GH #8),
     - checklocale (GH #16),
+    - check_postmap_up_to_date (GH #20),
     - checkcert_smtp_starttls (GH #10).
   * Fix shellcheck warnings in all the scripts.
 

@@ -564,6 +564,27 @@ checkaliases() {
     return 0
 }
 
+# check_postmap_up_to_date <pathname>
+#   Check if <pathname>.db is up to date with respect to <pathname>.
+#
+#   Background: when you edit /etc/postfix/* it's so easy to forget to run
+#   postmap.
+#
+#   Example: check_postmap_up_to_date /etc/postfix/virtual
+check_postmap_up_to_date() {
+    info_check check_postmap_up_to_date "$@"
+    local f="$1"
+    [ -f "$f" ] || {
+        warn "$f does not exist"
+        return 1
+    }
+    [ "$f.db" -ot "$f" ] && {
+        warn "$f.db out of date; run postmap $f"
+        return 1
+    }
+    return 0
+}
+
 # checklilo
 #   Check if LILO was run after a kernel update.
 #
