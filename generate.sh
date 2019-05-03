@@ -2,6 +2,8 @@
 # Generate config file for pov-check-health
 #
 
+# shellcheck shell=sh
+
 pending=
 prefix_called=0
 

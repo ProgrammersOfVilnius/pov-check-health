@@ -48,7 +48,7 @@ test check: check-version check-docs
 
 .PHONY: shellcheck
 shellcheck:
-	shellcheck *.sh
+	shellcheck *.sh example.conf
 
 .PHONY: check-version
 check-version:

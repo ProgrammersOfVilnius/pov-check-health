@@ -46,23 +46,23 @@ if [ -t 1 ] && [ "$(tput colors)" -ge 8 ]; then
 fi
 
 info() {
-    test $verbose -gt 0 && printf "%s\n" "$*"
+    test $verbose -gt 0 && printf "%s\\n" "$*"
 }
 
 info_looking() {
-    test $verbose -gt 0 && printf "${purple}%s${reset}\n" "$*"
+    test $verbose -gt 0 && printf "${purple}%s${reset}\\n" "$*"
 }
 
 info_good() {
-    test $verbose -gt 0 && printf "${green}%s${reset}\n" "$*"
+    test $verbose -gt 0 && printf "${green}%s${reset}\\n" "$*"
 }
 
 info_action() {
-    printf "${blue}%s${reset}\n" "$*"
+    printf "${blue}%s${reset}\\n" "$*"
 }
 
 warn() {
-    printf "${red}%s${reset}\n" "$*" 1>&2
+    printf "${red}%s${reset}\\n" "$*" 1>&2
 }
 
 rc=0

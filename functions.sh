@@ -2,6 +2,8 @@
 # Functions for pov-check-health
 #
 
+# shellcheck shell=sh
+
 #
 # Helpers
 #

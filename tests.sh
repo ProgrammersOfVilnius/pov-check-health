@@ -1,6 +1,8 @@
 #!/bin/sh
 
+# shellcheck source=functions.sh
 . "$(dirname "$0")/functions.sh"
+# shellcheck source=generate.sh
 . "$(dirname "$0")/generate.sh"
 
 n_tests=0
