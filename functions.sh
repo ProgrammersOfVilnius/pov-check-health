@@ -452,6 +452,18 @@ cmpfiles() {
     }
 }
 
+# check_no_matching_lines <regexp> <pathname>
+#   Check that a file has no lines matching a regular expression.
+#
+#   Background: I had Jenkins jobs install random user crontabs.
+#
+#   Example: check_no_matching_lines ^[^#] /var/spool/cron/crontabs/jenkins
+check_no_matching_lines() {
+    info_check check_no_matching_lines "$@"
+    [ -f "$2" ] || return # no file, no problem
+    grep -q "$1" "$2" && warn "$2 has a line matching $1"
+}
+
 # checkaliases
 #   Check if /etc/aliases.db is up to date.
 #

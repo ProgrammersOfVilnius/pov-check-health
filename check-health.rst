@@ -249,6 +249,15 @@ cmpfiles <pathname1> <pathname2>
   Example: ``cmpfiles /etc/init.d/someservice /home/someservice/initscript``
 
 
+check_no_matching_lines <regexp> <pathname>
+  Check that a file has no lines matching a regular expression.
+
+  Background: I had Jenkins jobs install random user crontabs.
+
+
+  Example: ``check_no_matching_lines ^[^#] /var/spool/cron/crontabs/jenkins``
+
+
 checkaliases
   Check if /etc/aliases.db is up to date.
 
