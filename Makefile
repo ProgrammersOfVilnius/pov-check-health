@@ -46,6 +46,10 @@ $(builddir)/check-%: check-%.sh | $(builddir)
 test check: check-version check-docs
 	@./tests.sh
 
+.PHONY: shellcheck
+shellcheck:
+	shellcheck *.sh
+
 .PHONY: check-version
 check-version:
 	@for fn in $(manpage_sources); do \
