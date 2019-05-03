@@ -33,6 +33,9 @@ if [ "$color" -ne 0 ]; then
     w_reset='\033[0m'
 fi
 
+newline="
+"
+
 # warn about a failed check
 warn() {
     printf "${w_red}%s${w_reset}\\n" "$*" 1>&2
@@ -400,9 +403,14 @@ checkmailq() {
 #   Example: checkzopemailq /apps/zopes/*/var/mailqueue/new
 checkzopemailq() {
     info_check checkzopemailq "$@"
-    for f in $(find "$@" -type f -mmin +1); do
-        warn "stale zope mail message: $f"
-    done
+    (
+        set -f
+        IFS=$newline
+        # shellcheck disable=SC2044
+        for f in $(find "$@" -type f -mmin +1); do
+            warn "stale zope mail message: $f"
+        done
+    )
 }
 
 # checkcups <queuename>
