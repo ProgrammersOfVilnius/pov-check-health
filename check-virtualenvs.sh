@@ -109,7 +109,9 @@ for python in /usr/bin/python[23].[0-9]; do
             info "skipping $envdir, it looks like a full Python installation"
             continue
         fi
+        # shellcheck disable=SC2010
         versions=$(ls "$libdir"|grep -c ^python)
+        # shellcheck disable=SC2010
         minor_versions=$(ls "$libdir"|grep -c "^$major")
         checkifone "$envdir/bin/python" "/usr/bin/$python" "$versions"
         checkifone "$envdir/bin/$major" "/usr/bin/$python" "$minor_versions"
