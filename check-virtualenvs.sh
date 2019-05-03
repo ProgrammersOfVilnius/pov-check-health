@@ -105,11 +105,21 @@ checkifone() {
     fi
 }
 
+ignore="\
+^/usr/(local/)?lib/python|\
+^/usr/lib/debug/|\
+^/var/lib/docker/|\
+^/var/lib/flatpak/|\
+\\.local/share/flatpak/|\
+^/var/lib/lxd/|\
+^/snap/\
+"
+
 for python in /usr/bin/python[23].[0-9]; do
     python=${python#/usr/bin/}      # /usr/bin/python3.4 -> python3.4
     major=${python%??}              # python3.4 -> python3
     info_looking "looking for $python virtualenvs"
-    for libdir in $(locate -r "/lib/$python$" | grep -vE "^/usr/(local/)?lib/$python|^/usr/lib/debug/"); do
+    for libdir in $(locate -r "/lib/$python$" | grep -vE "$ignore"); do
         libdir=${libdir%/$python}   # /path/to/venv/lib
         envdir=${libdir%/lib}       # /path/to/venv
         if [ -e "$libdir/pkgconfig" ]; then
