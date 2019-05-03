@@ -109,8 +109,8 @@ for python in /usr/bin/python[23].[0-9]; do
             info "skipping $envdir, it looks like a full Python installation"
             continue
         fi
-        versions=$(ls "$libdir"|grep ^python|wc -l)
-        minor_versions=$(ls "$libdir"|grep "^$major"|wc -l)
+        versions=$(ls "$libdir"|grep -c ^python)
+        minor_versions=$(ls "$libdir"|grep -c "^$major")
         checkifone "$envdir/bin/python" "/usr/bin/$python" "$versions"
         checkifone "$envdir/bin/$major" "/usr/bin/$python" "$minor_versions"
         check "$envdir/bin/$python" "/usr/bin/$python"
