@@ -2,7 +2,7 @@
 # Functions for pov-check-health
 #
 
-# shellcheck shell=sh
+# shellcheck shell=dash
 
 #
 # Helpers
