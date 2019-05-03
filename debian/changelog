@@ -6,7 +6,9 @@ pov-check-health (0.13.0) UNRELEASED; urgency=medium
   * check-health:
     - fix checknfs to actually check the local mountpoint, not the remote
       export name.
-  * fix shellcheck warnings in all the scripts.
+  * New checks:
+    - checkcert_smtp_starttls (GH #10).
+  * Fix shellcheck warnings in all the scripts.
 
  -- Marius Gedminas <marius@gedmin.as>  Fri, 03 May 2019 15:40:42 +0300
 

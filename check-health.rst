@@ -335,6 +335,17 @@ checkcert_ssmtp <hostname> [<days>]
   This function is normally used from /etc/pov/check-ssl-certs.
 
 
+checkcert_smtp_starttls <hostname> [<days>]
+  Check if the SSL certificate of an SMTP server is close to expiration.
+
+  <days> defaults to $CHECKCERT_WARN_BEFORE, and if that's not specified, 21.
+
+
+  Example: ``checkcert_smtp_starttls mail.example.com``
+
+  This function is normally used from /etc/pov/check-ssl-certs.
+
+
 checkcert_imaps <hostname> [<days>]
   Check if the SSL certificate of an IMAPS server is close to expiration.
 
