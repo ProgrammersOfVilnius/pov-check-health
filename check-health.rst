@@ -183,6 +183,37 @@ checktoomanyproc_pgrep_full <limit> <cmdline>
   Example: ``checktoomanyproc_pgrep_full 2 '/usr/bin/java -jar /usr/share/jenkins/jenkins.war'``
 
 
+checkthreads <min> <pgrep-args>
+  Check that a process has at least <min> threads.
+
+  Uses pgrep <pgrep-args> to find the process.  Shows an error if pgrep finds
+  nothing, or if pgrep finds more than one process.
+
+  Useful to detect dying threads due to missing/buggy exception handling.
+
+
+  Example: ``checkthreads 7 runzope -u ivija-staging``
+
+
+checklocale <locale> <pgrep-args>
+  Check that a process is running with the correct locale set.
+
+  Uses pgrep <pgrep-args> to find the process.  Shows an error if pgrep finds
+  nothing, or if pgrep finds more than one process.
+
+  Looks at LC_ALL/LC_CTYPE/LANG in the process environment.  <locale> can be
+  a glob pattern.
+
+  Background: this is useful to detect problems when a system daemon's locale
+  differs depending on which sysadmin used their ssh session to launch it (or
+  if the daemon was started at system startup).
+
+
+  Example: ``checklocale en_US.UTF-8 runzope -u ivija-staging``
+
+  Example: ``checklocale '*.UTF-8' runzope -u ivija-staging``
+
+
 checkram [<free>[M/G/T]]
   Check that at least <free> metric mega/giga/terabytes of virtual memory are
   free.

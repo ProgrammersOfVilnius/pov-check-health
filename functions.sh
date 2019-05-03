@@ -330,6 +330,87 @@ checktoomanyproc_pgrep_full() {
     [ "$n" -lt "$limit" ] || warn "More than $((limit-1)) copies ($n) of $* running"
 }
 
+# helper for checkthreads and checklocale
+_pgrep_one() {
+    local pid
+    pid=$(pgrep "$@")
+    test "$(echo "$pid"|wc -l)" -gt 1 && {
+        # there's a race condition: when zope forks a child to run aspell, the child also appears to be zope for a brief moment
+        # hopefully 100ms is enough for it to do the exec, and hopefully we won't encounter a second race so quickly
+        sleep 0.1
+        pid=$(pgrep "$@")
+    }
+    test -z "$pid" && {
+        warn "no process found by pgrep $*"
+        return 1
+    }
+    test "$(echo "$pid"|wc -l)" -gt 1 && {
+        # shellcheck disable=SC2086
+        warn "more than one process found by pgrep $*:" $pid
+        # shellcheck disable=SC2086
+        ps $pid
+        return 1
+    }
+    printf "%s\\n" "$pid"
+}
+
+# checkthreads <min> <pgrep-args>
+#   Check that a process has at least <min> threads.
+#
+#   Uses pgrep <pgrep-args> to find the process.  Shows an error if pgrep finds
+#   nothing, or if pgrep finds more than one process.
+#
+#   Useful to detect dying threads due to missing/buggy exception handling.
+#
+#   Example: checkthreads 7 runzope -u ivija-staging
+checkthreads() {
+    info_check checkthreads "$@"
+    local shouldbe=$1
+    shift
+    local pid
+    pid=$(_pgrep_one "$@") || return 1
+    # shellcheck disable=SC2012
+    threads=$(ls "/proc/$pid/task"|wc -l)
+    test "$threads" -lt "$shouldbe" && {
+        warn "$* ($pid) has only $threads threads instead of $shouldbe"
+        return 1
+    }
+    return 0
+}
+
+# checklocale <locale> <pgrep-args>
+#   Check that a process is running with the correct locale set.
+#
+#   Uses pgrep <pgrep-args> to find the process.  Shows an error if pgrep finds
+#   nothing, or if pgrep finds more than one process.
+#
+#   Looks at LC_ALL/LC_CTYPE/LANG in the process environment.  <locale> can be
+#   a glob pattern.
+#
+#   Background: this is useful to detect problems when a system daemon's locale
+#   differs depending on which sysadmin used their ssh session to launch it (or
+#   if the daemon was started at system startup).
+#
+#   Example: checklocale en_US.UTF-8 runzope -u ivija-staging
+#   Example: checklocale '*.UTF-8' runzope -u ivija-staging
+checklocale() {
+    info_check checklocale "$@"
+    local shouldbe=$1
+    shift
+    local pid
+    pid=$(_pgrep_one "$@") || return 1
+    locale=$(tr '\0' '\n' < /proc/"$pid"/environ|grep -e ^LC_ALL=)
+    test -z "$locale" && locale=$(tr '\0' '\n' < /proc/"$pid"/environ|grep -e ^LC_CTYPE=)
+    test -z "$locale" && locale=$(tr '\0' '\n' < /proc/"$pid"/environ|grep -e ^LANG=)
+    case "${locale#*=}" in
+      $shouldbe) ;;
+      *)
+        warn "$* ($pid) has locale $locale instead of $shouldbe"
+        return 1
+        ;;
+    esac
+}
+
 # checkram [<free>[M/G/T]]
 #   Check that at least <free> metric mega/giga/terabytes of virtual memory are
 #   free.
