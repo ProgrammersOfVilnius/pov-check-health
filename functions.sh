@@ -606,7 +606,8 @@ checkcert_ssmtp() {
     info_check checkcert_ssmtp "$@"
     local server="$1"
     local days="${2:-${CHECKCERT_WARN_BEFORE:-21}}"
-    local output="$(/usr/lib/nagios/plugins/check_ssmtp -D "$days" -H "$server" -p 465 --ssl 2>&1)"
+    local output
+    output="$(/usr/lib/nagios/plugins/check_ssmtp -D "$days" -H "$server" -p 465 --ssl 2>&1)"
     case "$output" in
         OK\ *)
             info "$output"
@@ -630,7 +631,8 @@ checkcert_imaps() {
     info_check checkcert_imaps "$@"
     local server="$1"
     local days="${2:-${CHECKCERT_WARN_BEFORE:-21}}"
-    local output="$(/usr/lib/nagios/plugins/check_imap -D "$days" -H "$server" -p 993 --ssl 2>&1)"
+    local output
+    output="$(/usr/lib/nagios/plugins/check_imap -D "$days" -H "$server" -p 993 --ssl 2>&1)"
     case "$output" in
         OK\ *)
             info "$output"
