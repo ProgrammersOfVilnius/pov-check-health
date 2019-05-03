@@ -15,11 +15,11 @@ main_manpage := check-health.rst
 
 
 # change this to the lowest supported Ubuntu LTS
-TARGET_DISTRO := trusty
+TARGET_DISTRO := xenial
 
 # for testing in vagrant:
 #   mkdir -p ~/tmp/vagrantbox && cd ~/tmp/vagrantbox
-#   vagrant init ubuntu/trusty64
+#   vagrant init ubuntu/xenial64
 #   vagrant ssh-config --host vagrantbox >> ~/.ssh/config
 # now you can 'make vagrant-test-install', then 'ssh vagrantbox' and play
 # with the package
