@@ -35,21 +35,21 @@ fi
 
 # warn about a failed check
 warn() {
-    printf "${w_red}%s${w_reset}\n" "$*" 1>&2
+    printf "${w_red}%s${w_reset}\\n" "$*" 1>&2
     return 1
 }
 
 # inform about some possibly interesting condition (in verbose mode)
 info() {
     if [ $verbose -gt 0 ]; then
-        printf "%s\n" "$*"
+        printf "%s\\n" "$*"
     fi
 }
 
 # inform about a check to be run (in verbose mode)
 info_check() {
     if [ $verbose -gt 0 ]; then
-        printf "${purple}+ %s${reset}\n" "$*"
+        printf "${purple}+ %s${reset}\\n" "$*"
     fi
 }
 
@@ -57,9 +57,9 @@ info_check() {
 # insufficient)
 warn_check() {
     if [ $verbose -eq 0 ]; then
-        printf "${red}+ %s${reset}\n" "$*" 1>&2
+        printf "${red}+ %s${reset}\\n" "$*" 1>&2
     else
-        printf "${line_up}${red}+ %s${reset}\n" "$*" 1>&2
+        printf "${line_up}${red}+ %s${reset}\\n" "$*" 1>&2
     fi
 }
 
@@ -197,6 +197,9 @@ checkpidfile() {
     info_check checkpidfile "$@"
     [ -f "$1" ] || { warn "$1: pidfile missing"; return 1; }
     local rc=0
+    # NB: I want word splitting here, see
+    # https://github.com/ProgrammersOfVilnius/pov-check-health/issues/4
+    # shellcheck disable=SC2013
     for pid in $(cat "$1"); do
         test -d "/proc/$pid" || { warn "$1: stale pidfile ($pid)"; rc=1; }
     done
