@@ -1,24 +1,29 @@
 #!/bin/sh
 
 usage="\
-Usage: check-virtualenvs [-v] [-f]
+Usage: check-virtualenvs [-v] [-f|-n]
        check-virtualenvs -h"
 options="
 Options:
   -v  be more verbose
   -f  fix the problems by overwriting outdated Python binaries
+  -n  print the cp commands but do not execute them
 "
 
 verbose=0
 fix=0
+dry_run=0
 
-while getopts hvf OPT; do
+while getopts hvfn OPT; do
     case "$OPT" in
         v)
             verbose=1
             ;;
         f)
             fix=1
+            ;;
+        n)
+            dry_run=1
             ;;
         h)
             echo "$usage"
@@ -75,7 +80,9 @@ check() {
     if cmp -s "$binary" "$system"; then
         info_good "$binary is up to date"
     else
-        if [ $fix -ne 0 ]; then
+        if [ $dry_run -ne 0 ]; then
+            echo "cp $system $binary"
+        elif [ $fix -ne 0 ]; then
             info_action "cp $system $binary"
             cp "$system" "$binary" || rc=1
         else

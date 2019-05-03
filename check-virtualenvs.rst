@@ -7,15 +7,15 @@ check for stale virtualenvs
 ---------------------------
 
 :Author: Marius Gedminas <marius@gedmin.as>
-:Date: 2017-12-06
-:Version: 0.12.1
+:Date: 2019-05-03
+:Version: 0.13.0
 :Manual section: 8
 
 
 SYNOPSIS
 ========
 
-**check-virtualenvs** [**-v**] [**-f**]
+**check-virtualenvs** [**-v**] [**-f**|**-n**]
 **check-virtualenvs** **-h**]
 
 
@@ -31,6 +31,7 @@ OPTIONS
 
 -v           Verbose output
 -f           Fix the problems by overwriting outdated Python binaries
+-n           Print the **cp** commands but do not execute them
 
 
 BACKGROUND
@@ -59,7 +60,10 @@ positives.
 This script cannot deal with a single virtualenv containing multiple
 Python versions.
 
-This script will break if you put spaces in your directory names.
+This script will likely break if you put spaces in your directory names.
+
+If you uninstall a system Python version entirely then any virtualenvs that
+were based on it will not be found.
 
 
 TROUBLESHOOTING
