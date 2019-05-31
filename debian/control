@@ -9,7 +9,7 @@ Homepage: https://github.com/ProgrammersOfVilnius/pov-check-health
 Package: pov-check-health
 Architecture: all
 Depends: nagios-plugins-basic, ${misc:Depends}
-Recommends: postfix | mail-transport-agent
+Recommends: postfix | mail-transport-agent, mlocate
 Description: poor man's system health monitoring
  * This is an unofficial package.
  .
