@@ -1,10 +1,10 @@
-pov-check-health (0.13.1) UNRELEASED; urgency=medium
+pov-check-health (0.13.1) xenial; urgency=medium
 
   * debian/control:
     - add mlocate to Recommends, because check-virtualenvs needs it, and there
       are discussions about removing mlocate from the standard Ubuntu installs.
 
- -- Marius Gedminas <marius@gedmin.as>  Fri, 31 May 2019 13:01:49 +0300
+ -- Marius Gedminas <marius@gedmin.as>  Thu, 12 Sep 2019 16:12:37 +0300
 
 pov-check-health (0.13.0) xenial; urgency=medium
 
