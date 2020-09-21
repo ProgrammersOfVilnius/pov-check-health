@@ -36,7 +36,7 @@ generate_checkfs() {
     prefix "# Check free disk space"
     df -PT | { read -r header; while read -r device fstype size used free capacity mountpoint; do
         case $fstype in
-            tmpfs|devtmpfs|ecryptfs|nfs|vboxsf|squashfs)
+            tmpfs|devtmpfs|ecryptfs|nfs|nfs4|cifs|vboxsf|squashfs)
                 ;;
             *)
                 if [ "$free" -gt 1048576 ]; then
@@ -55,7 +55,7 @@ generate_checkinodes() {
     # shellcheck disable=SC2034
     df -PT | { read -r header; while read -r device fstype size used free capacity mountpoint; do
         case $fstype in
-            tmpfs|devtmpfs|ecryptfs|nfs|nfs4|cifs|vboxsf)
+            tmpfs|devtmpfs|ecryptfs|nfs|nfs4|cifs|vboxsf|squashfs)
                 ;;
             *)
                 emit checkinodes "$mountpoint"
