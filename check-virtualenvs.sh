@@ -45,8 +45,8 @@ reset=
 if [ -t 1 ] && [ "$(tput colors)" -ge 8 ]; then
     purple='\033[35m'
     green='\033[32m'
-    red='\033[34m'
-    blue='\033[31m'
+    red='\033[31m'
+    cyan='\033[36m'
     reset='\033[0m'
 fi
 
@@ -63,7 +63,7 @@ info_good() {
 }
 
 info_action() {
-    printf "${blue}%s${reset}\\n" "$*"
+    printf "${cyan}%s${reset}\\n" "$*"
 }
 
 warn() {

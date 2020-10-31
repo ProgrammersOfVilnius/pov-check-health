@@ -4,7 +4,8 @@ pov-check-health (0.13.2) UNRELEASED; urgency=medium
     - skip squashfs mounts (such as used by snapd).
   * check-virtualenvs:
     - correctly handle directory names with spaces in them,
-    - look for virtualenvs made with obsolete Python versions.
+    - look for virtualenvs made with obsolete Python versions,
+    - use the intended colors (red for warnings, blue for info).
 
  -- Marius Gedminas <marius@gedmin.as>  Sat, 31 Oct 2020 19:42:52 +0200
 
