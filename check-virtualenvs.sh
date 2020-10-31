@@ -116,27 +116,24 @@ ignore="\
 ^/snap/\
 "
 
-python_versions=(2.7 3.{0..10})
-
-for ver in "${python_versions[@]}"; do
-    python=python$ver               # 3.4 -> python3.4
-    major=${python%??}              # python3.4 -> python3
-    info_looking "looking for $python virtualenvs"
-    locate -r "/lib/$python$" | grep -vE "$ignore" | while read -r libdir; do
-        libdir=${libdir%/$python}   # /path/to/venv/lib
-        envdir=${libdir%/lib}       # /path/to/venv
-        if [ -e "$libdir/pkgconfig" ]; then
-            info "skipping $envdir, it looks like a full Python installation"
-            continue
-        fi
-        # shellcheck disable=SC2010
-        versions=$(ls "$libdir"|grep -c ^python)
-        # shellcheck disable=SC2010
-        minor_versions=$(ls "$libdir"|grep -c "^$major")
-        checkifone "$envdir/bin/python" "/usr/bin/$python" "$versions"
-        checkifone "$envdir/bin/$major" "/usr/bin/$python" "$minor_versions"
-        check "$envdir/bin/$python" "/usr/bin/$python"
-    done
+info_looking "looking for virtualenvs"
+locate -r "/lib/python[2-3][.][0-9][0-9]*$" | grep -vE "$ignore" | \
+while read -r libdir; do
+    python=${libdir##*/}        # /path/to/venv/lib/python3.8 -> python3.8
+    major=${python%.*}          # python3.4 -> python3
+    libdir=${libdir%/$python}   # /path/to/venv/lib
+    envdir=${libdir%/lib}       # /path/to/venv
+    if [ -e "$libdir/pkgconfig" ]; then
+        info "skipping $envdir, it looks like a full Python installation"
+        continue
+    fi
+    # shellcheck disable=SC2010
+    versions=$(ls "$libdir"|grep -c ^python)
+    # shellcheck disable=SC2010
+    minor_versions=$(ls "$libdir"|grep -c "^$major")
+    checkifone "$envdir/bin/python" "/usr/bin/$python" "$versions"
+    checkifone "$envdir/bin/$major" "/usr/bin/$python" "$minor_versions"
+    check "$envdir/bin/$python" "/usr/bin/$python"
 done
 
 exit $rc
