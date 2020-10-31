@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 usage="\
 Usage: check-virtualenvs [-v] [-f|-n]
@@ -119,7 +119,7 @@ for python in /usr/bin/python[23].[0-9]; do
     python=${python#/usr/bin/}      # /usr/bin/python3.4 -> python3.4
     major=${python%??}              # python3.4 -> python3
     info_looking "looking for $python virtualenvs"
-    for libdir in $(locate -r "/lib/$python$" | grep -vE "$ignore"); do
+    locate -r "/lib/$python$" | grep -vE "$ignore" | while read -r libdir; do
         libdir=${libdir%/$python}   # /path/to/venv/lib
         envdir=${libdir%/lib}       # /path/to/venv
         if [ -e "$libdir/pkgconfig" ]; then
