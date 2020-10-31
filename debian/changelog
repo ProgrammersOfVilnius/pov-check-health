@@ -1,11 +1,12 @@
-pov-check-health (0.13.3) UNRELEASED; urgency=medium
+pov-check-health (0.13.2) UNRELEASED; urgency=medium
 
   * check-health -g:
     - skip squashfs mounts (such as used by snapd).
   * check-virtualenvs:
-    - correctly handle directory names with spaces in them.
+    - correctly handle directory names with spaces in them,
+    - look for virtualenvs made with obsolete Python versions.
 
- -- Marius Gedminas <marius@gedmin.as>  Sat, 31 Oct 2020 19:36:25 +0200
+ -- Marius Gedminas <marius@gedmin.as>  Sat, 31 Oct 2020 19:42:52 +0200
 
 pov-check-health (0.13.1) xenial; urgency=medium
 

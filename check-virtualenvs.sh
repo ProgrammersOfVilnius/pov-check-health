@@ -111,12 +111,15 @@ ignore="\
 ^/var/lib/docker/|\
 ^/var/lib/flatpak/|\
 \\.local/share/flatpak/|\
+\\.steam/|\
 ^/var/lib/lxd/|\
 ^/snap/\
 "
 
-for python in /usr/bin/python[23].[0-9]; do
-    python=${python#/usr/bin/}      # /usr/bin/python3.4 -> python3.4
+python_versions=(2.7 3.{0..10})
+
+for ver in "${python_versions[@]}"; do
+    python=python$ver               # 3.4 -> python3.4
     major=${python%??}              # python3.4 -> python3
     info_looking "looking for $python virtualenvs"
     locate -r "/lib/$python$" | grep -vE "$ignore" | while read -r libdir; do
