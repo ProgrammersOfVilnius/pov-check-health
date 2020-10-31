@@ -7,8 +7,8 @@ check for stale virtualenvs
 ---------------------------
 
 :Author: Marius Gedminas <marius@gedmin.as>
-:Date: 2019-09-12
-:Version: 0.13.1
+:Date: 2020-10-31
+:Version: 0.13.2
 :Manual section: 8
 
 
@@ -60,10 +60,8 @@ positives.
 This script cannot deal with a single virtualenv containing multiple
 Python versions.
 
-This script will likely break if you put spaces in your directory names.
-
-If you uninstall a system Python version entirely then any virtualenvs that
-were based on it will not be found.
+If you build virtualenvs using custom, non-system interpreters and they get
+stale, this will not be detected.
 
 
 TROUBLESHOOTING

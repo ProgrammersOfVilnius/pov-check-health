@@ -7,8 +7,8 @@ check website health
 --------------------
 
 :Author: Marius Gedminas <marius@gedmin.as>
-:Date: 2019-09-12
-:Version: 0.13.1
+:Date: 2020-10-31
+:Version: 0.13.2
 :Manual section: 8
 
 
