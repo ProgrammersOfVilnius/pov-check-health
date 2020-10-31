@@ -73,11 +73,14 @@ warn() {
 rc=0
 
 check() {
-    binary=$1
-    system=$2
+    local binary=$1
+    local system=$2
     test -x "$binary" || return
     test -L "$binary" && return
-    if cmp -s "$binary" "$system"; then
+    if ! test -e "$system"; then
+        warn "$binary exists but $system does not"
+        rc=1
+    elif cmp -s "$binary" "$system"; then
         info_good "$binary is up to date"
     else
         if [ $dry_run -ne 0 ]; then
