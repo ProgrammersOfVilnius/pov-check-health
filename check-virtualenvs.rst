@@ -7,8 +7,8 @@ check for stale virtualenvs
 ---------------------------
 
 :Author: Marius Gedminas <marius@gedmin.as>
-:Date: 2020-10-31
-:Version: 0.13.2
+:Date: 2020-11-06
+:Version: 0.13.3
 :Manual section: 8
 
 

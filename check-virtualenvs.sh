@@ -120,7 +120,7 @@ ignore="\
 "
 
 info_looking "looking for virtualenvs"
-locate -r "/lib/python[2-3][.][0-9][0-9]*$" | grep -vE "$ignore" | \
+locate --regexp "/lib/python[2-3][.][0-9][0-9]*$" | grep -vE "$ignore" | \
 while read -r libdir; do
     python=${libdir##*/}        # /path/to/venv/lib/python3.8 -> python3.8
     major=${python%.*}          # python3.4 -> python3

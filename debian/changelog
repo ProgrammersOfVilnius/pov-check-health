@@ -1,3 +1,10 @@
+pov-check-health (0.13.3) UNRELEASED; urgency=medium
+
+  * check-virtualenvs:
+    - workaround for plocate bug on groovy (LP: #1903336).
+
+ -- Marius Gedminas <marius@gedmin.as>  Fri, 06 Nov 2020 19:58:32 +0200
+
 pov-check-health (0.13.2) xenial; urgency=medium
 
   * check-health -g:
