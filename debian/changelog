@@ -4,6 +4,10 @@ pov-check-health (0.13.3) UNRELEASED; urgency=medium
     - workaround for plocate bug on groovy (LP: #1903336).
   * check-health:
     - ignore /var/run/samba/samba-dcerpcd.pid.
+  * debian/control:
+    - reverse order of python3-docutils | python-docutils in Build-Depends,
+    - replace nagios-plugins-basic with monitoring-plugins-basic,
+    - replace mlocate with plocate in Recommends.
 
  -- Marius Gedminas <marius@gedmin.as>  Tue, 05 May 2026 18:36:35 +0300
 
