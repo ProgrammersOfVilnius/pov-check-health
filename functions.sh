@@ -44,14 +44,14 @@ warn() {
 
 # inform about some possibly interesting condition (in verbose mode)
 info() {
-    if [ $verbose -gt 0 ]; then
+    if [ "$verbose" -gt 0 ]; then
         printf "%s\\n" "$*"
     fi
 }
 
 # inform about a check to be run (in verbose mode)
 info_check() {
-    if [ $verbose -gt 0 ]; then
+    if [ "$verbose" -gt 0 ]; then
         printf "${purple}+ %s${reset}\\n" "$*"
     fi
 }
@@ -59,7 +59,7 @@ info_check() {
 # inform about a check that failed (when the failure message itself is
 # insufficient)
 warn_check() {
-    if [ $verbose -eq 0 ]; then
+    if [ "$verbose" -eq 0 ]; then
         printf "${red}+ %s${reset}\\n" "$*" 1>&2
     else
         printf "${line_up}${red}+ %s${reset}\\n" "$*" 1>&2
@@ -406,6 +406,7 @@ checklocale() {
     locale=$(tr '\0' '\n' < /proc/"$pid"/environ|grep -e ^LC_ALL=)
     test -z "$locale" && locale=$(tr '\0' '\n' < /proc/"$pid"/environ|grep -e ^LC_CTYPE=)
     test -z "$locale" && locale=$(tr '\0' '\n' < /proc/"$pid"/environ|grep -e ^LANG=)
+    # shellcheck disable=SC2254
     case "${locale#*=}" in
       $shouldbe) ;;
       *)
