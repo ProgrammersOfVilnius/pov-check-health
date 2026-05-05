@@ -231,6 +231,10 @@ checkpidfiles() {
                 # ignore: this one is always stale, yet nothing bad happens
                 info "ignoring $pidfile since it's always stale"
                 ;;
+            /var/run/samba/samba-dcerpcd.pid)
+                # ignore: this one is often stale, yet nothing bad happens
+                info "ignoring $pidfile since it's often stale"
+                ;;
             /var/run/sm-notify.pid)
                 # ignore: this one is always stale, yet nothing bad happens
                 info "ignoring $pidfile since it's always stale"
