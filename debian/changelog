@@ -1,4 +1,4 @@
-pov-check-health (0.13.3) UNRELEASED; urgency=medium
+pov-check-health (0.14.0) jammy; urgency=medium
 
   * check-virtualenvs:
     - workaround for plocate bug on groovy (LP: #1903336),
@@ -9,8 +9,9 @@ pov-check-health (0.13.3) UNRELEASED; urgency=medium
     - reverse order of python3-docutils | python-docutils in Build-Depends,
     - replace nagios-plugins-basic with monitoring-plugins-basic,
     - replace mlocate with plocate in Recommends.
+  * Drop support for Ubuntu versions older than 22.04 LTS.
 
- -- Marius Gedminas <marius@gedmin.as>  Tue, 05 May 2026 18:36:35 +0300
+ -- Marius Gedminas <marius@gedmin.as>  Tue, 05 May 2026 19:40:01 +0300
 
 pov-check-health (0.13.2) xenial; urgency=medium
 
