@@ -10,15 +10,15 @@ n_tests=0
 assertEqual() {
     fn=$1
     shift
-    if [ x"$1" = x"=" ]; then
+    if [ "$1" = "=" ]; then
         args="$fn"
         actual=$($fn)
         expected=$2
-    elif [ x"$2" = x"=" ]; then
+    elif [ "$2" = "=" ]; then
         args="$fn $1"
         actual=$($fn "$1")
         expected=$3
-    elif [ x"$3" = x"=" ]; then
+    elif [ "$3" = "=" ]; then
         args="$fn $1 $2"
         actual=$($fn "$1" "$2")
         expected=$4
@@ -31,7 +31,7 @@ assertEqual() {
         warn "  assertEqual $fn $*"
         exit 1
     fi
-    if ! [ x"$actual" = x"$expected" ]; then
+    if ! [ "$actual" = "$expected" ]; then
         warn "assertion failure: $args == $actual (expected $expected)"
         exit 1
     fi
@@ -70,13 +70,16 @@ assertEqual _to_mb 1t = 1000000
 assertEqual _to_mb 3T = 3000000
 assertEqual _to_mb "" 1000 = 1000
 
+# shellcheck disable=SC2317
 _test() { emit "a"; }
 assertEqual _test = "a"
 
+# shellcheck disable=SC2317
 _test() { prefix "b"; emit "c"; }
 assertEqual _test = "b
 c"
 
+# shellcheck disable=SC2317
 _test() { prefix "d"; prefix "e"; emit "f"; }
 assertEqual _test = "d
 
