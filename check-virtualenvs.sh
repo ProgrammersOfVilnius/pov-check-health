@@ -76,6 +76,7 @@ check() {
     local binary=$1
     local system=$2
     test -x "$binary" || return
+    test -f "$binary" || return
     test -L "$binary" && return
     if ! test -e "$system"; then
         warn "$binary exists but $system does not"
@@ -100,6 +101,7 @@ checkifone() {
     system=$2
     versions=$3
     test -x "$binary" || return
+    test -f "$binary" || return
     test -L "$binary" && return
     if [ "$versions" -ne 1 ]; then
         warn "${binary%/bin/python*}/lib has multiple python versions, cannot check $binary"

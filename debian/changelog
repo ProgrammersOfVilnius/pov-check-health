@@ -1,7 +1,8 @@
 pov-check-health (0.13.3) UNRELEASED; urgency=medium
 
   * check-virtualenvs:
-    - workaround for plocate bug on groovy (LP: #1903336).
+    - workaround for plocate bug on groovy (LP: #1903336),
+    - skip directories that look like a Python interpreter.
   * check-health:
     - ignore /var/run/samba/samba-dcerpcd.pid.
   * debian/control:
