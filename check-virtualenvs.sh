@@ -40,7 +40,7 @@ done
 purple=
 green=
 red=
-blue=
+cyan=
 reset=
 if [ -t 1 ] && [ "$(tput colors)" -ge 8 ]; then
     purple='\033[35m'
@@ -124,7 +124,7 @@ locate --regexp "/lib/python[2-3][.][0-9][0-9]*$" | grep -vE "$ignore" | \
 while read -r libdir; do
     python=${libdir##*/}        # /path/to/venv/lib/python3.8 -> python3.8
     major=${python%.*}          # python3.4 -> python3
-    libdir=${libdir%/$python}   # /path/to/venv/lib
+    libdir=${libdir%/*}         # /path/to/venv/lib
     envdir=${libdir%/lib}       # /path/to/venv
     if [ -e "$libdir/pkgconfig" ]; then
         info "skipping $envdir, it looks like a full Python installation"
