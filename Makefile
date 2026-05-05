@@ -15,7 +15,7 @@ main_manpage := check-health.rst
 
 
 # change this to the lowest supported Ubuntu LTS
-TARGET_DISTRO := xenial
+TARGET_DISTRO := jammy
 
 # for testing in vagrant:
 #   mkdir -p ~/tmp/vagrantbox && cd ~/tmp/vagrantbox
@@ -27,10 +27,15 @@ VAGRANT_DIR := ~/tmp/vagrantbox
 VAGRANT_SSH_ALIAS := vagrantbox
 
 
-.PHONY: all
-all: $(scripts) $(manpages)
+##: Development
 
-clean:
+
+.PHONY: all
+all: $(scripts) $(manpages)             ##: generate scripts and manual pages
+
+include help.mk
+
+clean:                                  ##: delete generated files
 	rm -f $(scripts) $(manpages)
 
 $(builddir):
@@ -43,15 +48,17 @@ $(builddir)/check-%: check-%.sh | $(builddir)
 	sed -e 's,^libdir=\.$$,libdir=/usr/share/pov-check-health,' $< > $@
 
 .PHONY: test check
-test check: check-version check-docs
+test check: check-version check-docs    ##: run tests
 	@./tests.sh
 
 .PHONY: shellcheck
-shellcheck:
+shellcheck:                             ##: run shellcheck
 	shellcheck *.sh example.conf
 
+##: Release checks
+
 .PHONY: check-version
-check-version:
+check-version:                          ##: check version numbers in man pages
 	@for fn in $(manpage_sources); do \
 	    grep -q ":Version: $(version)" $$fn || { \
 	        echo "Version number in $$fn doesn't match debian/changelog ($(version))." 2>&1; \
@@ -67,17 +74,17 @@ check-version:
 	done
 
 .PHONY: update-version
-update-version:
+update-version:                         ##: update version numbers in man pages
 	sed -i -e 's/^:Version: .*/:Version: $(version)/' $(manpage_sources)
 	sed -i -e 's/^:Date: .*/:Date: $(date)/' $(manpage_sources)
 
 .PHONY: check-docs
-check-docs:
+check-docs:                             ##: check if docs are outdated
 	@./extract-documentation.py -c $(main_manpage) || echo "Run make update-docs please"
 	@echo "$(main_manpage): docs match comments in functions.sh"
 
 .PHONY: check-target
-check-target:
+check-target:                           ##: check debian/changelog target distro
 	@test "$(target_distribution)" = "$(TARGET_DISTRO)" || { \
 	    echo "Distribution in debian/changelog should be '$(TARGET_DISTRO)'" 2>&1; \
 	    echo "Run make update-target" 2>&1; \
@@ -85,11 +92,11 @@ check-target:
 	}
 
 .PHONY: update-target
-update-target:
+update-target:                          ##: update debian/changelog prior to release
 	dch -r -D $(TARGET_DISTRO) ""
 
 .PHONY: update-docs
-update-docs:
+update-docs:                            ##: update man pages with function descriptions
 	./extract-documentation.py -u $(main_manpage)
 
 .PHONY: install
@@ -119,19 +126,14 @@ clean-build-tree:
 	rm -rf pkgbuild/$(source)
 	git archive --format=tar --prefix=pkgbuild/$(source)/ HEAD | tar -xf -
 
+##: Release helpers
+
 .PHONY: source-package
-source-package: clean-build-tree
+source-package: clean-build-tree                ##: build a Debian source package for testing/uploading
 	cd pkgbuild/$(source) && debuild -S -i -k$(GPGKEY)
 
-.PHONY: upload-to-ppa release
-release upload-to-ppa: check-target check source-package
-	dput ssh-ppa:pov/ppa pkgbuild/$(source)_$(version)_source.changes
-	git tag $(version)
-	git push
-	git push --tags
-
 .PHONY: binary-package
-binary-package: clean-build-tree
+binary-package: clean-build-tree                ##: build a Debian binary package for local testing
 	cd pkgbuild/$(source) && debuild -i -k$(GPGKEY)
 	@echo
 	@echo "Built pkgbuild/$(source)_$(version)_all.deb"
@@ -143,9 +145,18 @@ vagrant-test-install: binary-package
 	ssh $(VAGRANT_SSH_ALIAS) 'sudo DEBIAN_FRONTEND=noninteractive dpkg -i /vagrant/$(source)_$(version)_all.deb; sudo apt-get install -f'
 
 .PHONY: pbuilder-test-build
-pbuilder-test-build: source-package
+pbuilder-test-build: source-package             ##: test building the source package in a chroot
 	# NB: 1st time run pbuilder-dist $(TARGET_DISTRO) create
 	# NB: you need to periodically run pbuilder-dist $(TARGET_DISTRO) update
 	pbuilder-dist $(TARGET_DISTRO) build pkgbuild/$(source)_$(version).dsc
 	@echo
 	@echo "Look for the package in ~/pbuilder/$(TARGET_DISTRO)/"
+
+##: Release
+
+.PHONY: upload-to-ppa release
+release upload-to-ppa: check-target check source-package        ##: publish a release to the pov PPA
+	dput ssh-ppa:pov/ppa pkgbuild/$(source)_$(version)_source.changes
+	git tag $(version)
+	git push
+	git push --tags
