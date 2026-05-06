@@ -34,9 +34,8 @@ VAGRANT_SSH_ALIAS := vagrantbox
 all: $(scripts) $(manpages)             ##: generate scripts and manual pages
 
 include help.mk
-
-clean:                                  ##: delete generated files
-	rm -f $(scripts) $(manpages)
+HELP_INDENT = "  "
+HELP_WIDTH = 28
 
 $(builddir):
 	mkdir $@
@@ -47,18 +46,24 @@ $(builddir)/%.8: %.rst | $(builddir)
 $(builddir)/check-%: check-%.sh | $(builddir)
 	sed -e 's,^libdir=\.$$,libdir=/usr/share/pov-check-health,' $< > $@
 
-.PHONY: test check
-test check: check-version check-docs    ##: run tests
+.PHONY: test
+test: check-version check-docs          ##: run tests
 	@./tests.sh
 
 .PHONY: shellcheck
 shellcheck:                             ##: run shellcheck
 	shellcheck *.sh example.conf
 
-##: Release checks
+clean:                                  ##: delete generated files
+	rm -f $(scripts) $(manpages)
+
+##: Run these when `make release` tells you to, otherwise ignore them
+
+.PHONY: check
+check: test                             ## pre-release testing
 
 .PHONY: check-version
-check-version:                          ##: check version numbers in man pages
+check-version:                          ## check version numbers in man pages
 	@for fn in $(manpage_sources); do \
 	    grep -q ":Version: $(version)" $$fn || { \
 	        echo "Version number in $$fn doesn't match debian/changelog ($(version))." 2>&1; \
@@ -79,12 +84,12 @@ update-version:                         ##: update version numbers in man pages
 	sed -i -e 's/^:Date: .*/:Date: $(date)/' $(manpage_sources)
 
 .PHONY: check-docs
-check-docs:                             ##: check if docs are outdated
+check-docs:                             ## check if docs are outdated
 	@./extract-documentation.py -c $(main_manpage) || echo "Run make update-docs please"
 	@echo "$(main_manpage): docs match comments in functions.sh"
 
 .PHONY: check-target
-check-target:                           ##: check debian/changelog target distro
+check-target:                           ## check debian/changelog target distro
 	@test "$(target_distribution)" = "$(TARGET_DISTRO)" || { \
 	    echo "Distribution in debian/changelog should be '$(TARGET_DISTRO)'" 2>&1; \
 	    echo "Run make update-target" 2>&1; \
@@ -126,7 +131,7 @@ clean-build-tree:
 	rm -rf pkgbuild/$(source)
 	git archive --format=tar --prefix=pkgbuild/$(source)/ HEAD | tar -xf -
 
-##: Release helpers
+##: Test before you release
 
 .PHONY: source-package
 source-package: clean-build-tree                ##: build a Debian source package for testing/uploading
@@ -155,7 +160,7 @@ pbuilder-test-build: source-package             ##: test building the source pac
 ##: Release
 
 .PHONY: upload-to-ppa release
-release upload-to-ppa: check-target check source-package        ##: publish a release to the pov PPA
+release upload-to-ppa: check-target check source-package        ##: prepare, build and upload a source .deb to the PPA
 	dput ssh-ppa:pov/ppa pkgbuild/$(source)_$(version)_source.changes
 	git tag $(version)
 	git push
